@@ -11,9 +11,7 @@ import java.util.Set;
 /**
  * Adds a floating task to the task list.
  */
-public class AddFloatingCommand extends Command {
-
-    public static final String COMMAND_WORD = "add";
+public class AddFloatingCommand extends AddCommand{
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a floating task to the task list. "
             + "Parameters: TASK_NAME [t/TAG]...\n"
@@ -46,9 +44,9 @@ public class AddFloatingCommand extends Command {
     public CommandResult execute() {
         assert model != null;
         try {
-            model.addTask(toAdd);
+            model.addFloatingTask(toAdd);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
-        } catch (UniqueTaskList.DuplicateTaskException e) {
+        } catch (UniqueTaskFloatingList.DuplicateTaskException e) {
             return new CommandResult(MESSAGE_DUPLICATE_TASK);
         }
 

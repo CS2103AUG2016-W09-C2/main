@@ -1,5 +1,7 @@
 package seedu.address.model.task;
 
+import java.util.Date;
+
 import seedu.address.model.tag.UniqueTagList;
 
 public interface ReadOnlyNonFloatingTask {
@@ -11,8 +13,8 @@ public interface ReadOnlyNonFloatingTask {
      */
     UniqueTagList getTags();
 
-    DateAndTime getStartDateAndTime();
-    DateAndTime getEndDateAndTime();
+    Date getStartDateAndTime();
+    Date getEndDateAndTime();
     
     /**
      * Returns true if both have the same state. (interfaces cannot override .equals)

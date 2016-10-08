@@ -1,22 +1,24 @@
 package seedu.address.model.task;
 
+import java.util.Date;
+
 import seedu.address.model.tag.UniqueTagList;
 
 public class NonFloatingTask extends Task implements ReadOnlyNonFloatingTask {
 
-    private DateAndTime start, end;
+    private Date start, end;
     
-    public NonFloatingTask(Name name, UniqueTagList tags, DateAndTime start, DateAndTime end) {
-        super(name, tags);
+    public NonFloatingTask(Name name, Date start, Date end, UniqueTagList uniqueTagList) {
+        super(name, uniqueTagList);
         this.start = start;
         this.end = end;
     }
     
-    public DateAndTime getStartDateAndTime() {
+    public Date getStartDateAndTime() {
         return start;
     }
     
-    public DateAndTime getEndDateAndTime() {
+    public Date getEndDateAndTime() {
         return end;
     }
 

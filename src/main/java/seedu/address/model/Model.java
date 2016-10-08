@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.model.task.FloatingTask;
+import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.ReadOnlyFloatingTask;
 import seedu.address.model.task.UniqueTaskList;
 
@@ -20,9 +21,12 @@ public interface Model {
     /** Deletes the given task. */
     void deleteTask(ReadOnlyFloatingTask target) throws UniqueTaskList.TaskNotFoundException;
 
-    /** Adds the given task */
-    void addTask(FloatingTask task) throws UniqueTaskList.DuplicateTaskException;
-
+    /** Adds the given floating task */
+    void addFloatingTask(FloatingTask task) throws UniqueTaskList.DuplicateTaskException;
+    
+    /** Adds the given non floating task */
+    void addNonFloatingTask(NonFloatingTask task) throws UniqueTaskList.DuplicateTaskException;
+    
     /** Returns the filtered task list as an {@code UnmodifiableObservableList<ReadOnlyTask>} */
     UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredTaskList();
 

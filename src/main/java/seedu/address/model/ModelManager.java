@@ -6,8 +6,11 @@ import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.Command;
 import seedu.address.model.task.FloatingTask;
+import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.ReadOnlyFloatingTask;
-import seedu.address.model.task.UniqueTaskList;
+import seedu.address.model.task.Task;
+import seedu.address.model.task.UniqueTaskFloatingList;
+import seedu.address.model.task.UniqueTaskList.DuplicateTaskException;
 import seedu.address.model.task.UniqueTaskList.TaskNotFoundException;
 import seedu.address.commons.events.model.TaskListChangedEvent;
 import seedu.address.commons.events.model.FilePathChangeEvent;
@@ -25,7 +28,8 @@ public class ModelManager extends ComponentManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
     private final TaskList taskList;
-    private final FilteredList<FloatingTask> filteredTasks;
+    private final FilteredList<FloatingTask> filteredFloatingTasks;
+    private final FilteredList<NonFloatingTask> filteredNonFloatingTasks;
     
     /**
      * Initializes a ModelManager with the given TaskList
@@ -39,7 +43,8 @@ public class ModelManager extends ComponentManager implements Model {
         logger.fine("Initializing with address book: " + src + " and user prefs " + userPrefs);
 
         taskList = new TaskList(src);
-        filteredTasks = new FilteredList<>(taskList.getTasks());
+        filteredFloatingTasks = new FilteredList<>(taskList.getFloatingTasks());
+        filteredNonFloatingTasks = new FilteredList<>(taskList.getNonFloatingTasks());
     }
 
     public ModelManager() {
@@ -48,7 +53,8 @@ public class ModelManager extends ComponentManager implements Model {
 
     public ModelManager(ReadOnlyTaskList initialData, UserPrefs userPrefs) {
         taskList = new TaskList(initialData);
-        filteredTasks = new FilteredList<>(taskList.getTasks());
+        filteredFloatingTasks = new FilteredList<>(taskList.getFloatingTasks());
+        filteredNonFloatingTasks = new FilteredList<>(taskList.getNonFloatingTasks());
     }
 
     @Override
@@ -74,11 +80,18 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public synchronized void addTask(FloatingTask task) throws UniqueTaskList.DuplicateTaskException {
-        taskList.addTask(task);
+    public synchronized void addFloatingTask(FloatingTask task) throws DuplicateTaskException {
+        taskList.addFloatingTask(task);
         updateFilteredListToShowAll();
         indicateTaskListChanged();
     }
+
+    @Override
+    public synchronized void addNonFloatingTask(NonFloatingTask task) throws DuplicateTaskException {
+        taskList.addNonFloatingTask(task);
+        updateFilteredListToShowAll();
+        indicateTaskListChanged();
+    }    
     
     @Override
 	public void changeDirectory(String filePath) {
@@ -90,12 +103,12 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredTaskList() {
-        return new UnmodifiableObservableList<>(filteredTasks);
+        return new UnmodifiableObservableList<>(filteredFloatingTasks);
     }
 
     @Override
     public void updateFilteredListToShowAll() {
-        filteredTasks.setPredicate(null);
+        filteredFloatingTasks.setPredicate(null);
     }
 
     @Override
@@ -104,7 +117,7 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     private void updateFilteredTaskList(Expression expression) {
-        filteredTasks.setPredicate(expression::satisfies);
+        filteredFloatingTasks.setPredicate(expression::satisfies);
     }
 
     //========== Inner classes/interfaces used for filtering ==================================================

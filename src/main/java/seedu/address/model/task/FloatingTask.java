@@ -14,6 +14,8 @@ public class FloatingTask extends Task implements ReadOnlyFloatingTask {
     private Name name;
     private UniqueTagList tags;
 
+    public FloatingTask() {}
+    
     /**
      * Every field must be present and not null.
      */

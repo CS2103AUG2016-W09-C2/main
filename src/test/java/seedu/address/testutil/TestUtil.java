@@ -135,7 +135,7 @@ public class TestUtil {
     }
 
     public static TaskList generateEmptyTaskList() {
-        return new TaskList(new UniqueTaskList(), new UniqueTagList());
+        return new TaskList(new UniqueTaskFloatingList(), new UniqueTagList());
     }
 
     public static XmlSerializableTaskList generateSampleStorageTaskList() {
