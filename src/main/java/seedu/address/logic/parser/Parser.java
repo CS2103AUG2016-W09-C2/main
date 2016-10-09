@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 
+import com.joestelmach.natty.*;
+
 /**
  * Parses user input.
  */
@@ -28,12 +30,21 @@ public class Parser {
     private static final Pattern KEYWORDS_ARGS_FORMAT =
             Pattern.compile("(?<keywords>\\S+(?:\\s+\\S+)*)"); // one or more keywords separated by whitespace
 
-    private static final Pattern TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
+    private static final Pattern NON_FLOATING_TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
             Pattern.compile("(?<name>[^/]+)"
-                    + "(?<startTime>(?: start/[^/]+)*)"
-                    + "(?<endTime>(?: end/[^/]+)*)"
-                    + "(?<tagArguments>(?: t/[^/]+)*)"); // variable number of tags
+                    +" from (?<startdate>[^/ ]+ [^/ ]+)"
+                    +" to (?<enddate>[^/ ]+ [^/ ]+)"
+                    + "(?<tagArguments>(?: t/[^ ]+)*)"); // variable number of tags
 
+    private static final Pattern NON_FLOATING_LAZY_TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
+            Pattern.compile("(?<name>[^/]+)"
+                    +" by (?<enddate>[^/ ]+ [^/ ]+)"
+                    + "(?<tagArguments>(?: t/[^ ]+)*)"); // variable number of tags
+    
+    private static final Pattern FLOATING_TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
+            Pattern.compile("(?<name>[^/]+)"
+                    + "(?<tagArguments>(?: t/[^ ]+)*)"); // variable number of tags    
+    
     public Parser() {}
 
     /**
@@ -52,8 +63,8 @@ public class Parser {
         final String arguments = matcher.group("arguments");
         switch (commandWord) {
 
-        case AddFloatingCommand.COMMAND_WORD:
-            return prepareAddFloating(arguments);
+        case AddCommand.COMMAND_WORD:
+            return prepareAdd(arguments);
 
         case SelectCommand.COMMAND_WORD:
             return prepareSelect(arguments);
@@ -96,8 +107,18 @@ public class Parser {
      * @param args full command args string
      * @return the prepared command
      */
-    private Command prepareAddFloating(String args){
-        final Matcher matcher = TASK_DATA_ARGS_FORMAT.matcher(args.trim());
+    private Command prepareAdd(String args){
+       final Matcher matcher = NON_FLOATING_TASK_DATA_ARGS_FORMAT.matcher(args.trim());
+        // Validate arg string format
+        if (!matcher.matches()) {
+            // Try floating task
+            return prepareAddFloating(args);
+        }
+        return prepareAddNonFloating(args, matcher);
+    }
+
+    private Command prepareAddFloating(String args) {
+        final Matcher matcher = FLOATING_TASK_DATA_ARGS_FORMAT.matcher(args.trim());
         // Validate arg string format
         if (!matcher.matches()) {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddFloatingCommand.MESSAGE_USAGE));
@@ -110,6 +131,37 @@ public class Parser {
         } catch (IllegalValueException ive) {
             return new IncorrectCommand(ive.getMessage());
         }
+    }
+
+    private Command prepareAddNonFloating(String args, Matcher matcher) {
+        com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+        String startDate = matcher.group("startdate");
+        String endDate = matcher.group("enddate");
+        List<DateGroup> startDateGroup = nattyParser.parse(startDate);
+        List<DateGroup> endDateGroup = nattyParser.parse(endDate);
+        
+        try {
+            return new AddNonFloatingCommand(
+                    matcher.group("name"),
+                    startDateGroup.get(0).getDates().get(0),
+                    endDateGroup.get(0).getDates().get(0),
+                    getTagsFromArgs(matcher.group("tagArguments"))
+            );
+        }catch (IllegalValueException ive) {
+            return new IncorrectCommand(ive.getMessage());
+        }
+    }
+
+    private List<Date> findDatesInDateGroup(List<DateGroup> groups) {
+        List<Date> dates = new ArrayList<Date>();
+        
+        for(DateGroup group : groups) {
+            /* if any Dates are present in current group then add them to dateList */
+            if (group.getDates() != null) {
+                    dates.addAll(group.getDates());
+            }            
+        }
+        return dates;
     }
     
 

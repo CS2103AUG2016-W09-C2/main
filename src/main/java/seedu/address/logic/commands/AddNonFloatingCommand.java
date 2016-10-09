@@ -36,8 +36,8 @@ public class AddNonFloatingCommand extends AddCommand {
         }
         this.toAdd = new NonFloatingTask(
                 new Name(name),
-                start,
-                end,
+                new Date(start.getTime()),
+                new Date(end.getTime()),
                 new UniqueTagList(tagSet)
         );
     }
