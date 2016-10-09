@@ -6,19 +6,19 @@ import seedu.address.model.tag.UniqueTagList;
 
 public class NonFloatingTask extends Task implements ReadOnlyNonFloatingTask {
 
-    private Date start, end;
+    private TaskDate start, end;
     
-    public NonFloatingTask(Name name, Date start, Date end, UniqueTagList uniqueTagList) {
+    public NonFloatingTask(Name name, TaskDate start, TaskDate end, UniqueTagList uniqueTagList) {
         super(name, uniqueTagList);
         this.start = start;
         this.end = end;
     }
     
-    public Date getStartDateAndTime() {
+    public TaskDate getStartTaskDate() {
         return start;
     }
     
-    public Date getEndDateAndTime() {
+    public TaskDate getEndTaskDate() {
         return end;
     }
 

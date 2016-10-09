@@ -10,6 +10,7 @@ import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.task.FloatingTask;
 import seedu.address.model.task.Name;
 import seedu.address.model.task.NonFloatingTask;
+import seedu.address.model.task.TaskDate;
 import seedu.address.model.task.UniqueTaskFloatingList;
 
 public class AddNonFloatingCommand extends AddCommand {
@@ -28,7 +29,7 @@ public class AddNonFloatingCommand extends AddCommand {
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddNonFloatingCommand(String name, Date start, Date end, Set<String> tags)
+    public AddNonFloatingCommand(String name, TaskDate start, TaskDate end, Set<String> tags)
             throws IllegalValueException {
         final Set<Tag> tagSet = new HashSet<>();
         for (String tagName : tags) {
@@ -36,8 +37,8 @@ public class AddNonFloatingCommand extends AddCommand {
         }
         this.toAdd = new NonFloatingTask(
                 new Name(name),
-                new Date(start.getTime()),
-                new Date(end.getTime()),
+                new TaskDate(start),
+                new TaskDate(end),
                 new UniqueTagList(tagSet)
         );
     }

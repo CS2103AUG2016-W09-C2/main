@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 
 
 import seedu.address.logic.commands.*;
+import seedu.address.model.task.TaskDate;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.exceptions.IllegalValueException;
 
@@ -32,8 +33,8 @@ public class Parser {
 
     private static final Pattern NON_FLOATING_TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
             Pattern.compile("(?<name>[^/]+)"
-                    +" from (?<startdate>[^/ ]+ [^/ ]+)"
-                    +" to (?<enddate>[^/ ]+ [^/ ]+)"
+                    +" from (?<startdate>[^/ a-zA-Z]+ [^/ 0-9]+ [^/ ]+)"
+                    +" to (?<enddate>[^/ a-zA-Z]+ [^/ 0-9]+ [^/ ]+)"
                     + "(?<tagArguments>(?: t/[^ ]+)*)"); // variable number of tags
 
     private static final Pattern NON_FLOATING_LAZY_TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
@@ -143,8 +144,8 @@ public class Parser {
         try {
             return new AddNonFloatingCommand(
                     matcher.group("name"),
-                    startDateGroup.get(0).getDates().get(0),
-                    endDateGroup.get(0).getDates().get(0),
+                    new TaskDate(startDate,startDateGroup.get(0).getDates().get(0)),
+                    new TaskDate(endDate, endDateGroup.get(0).getDates().get(0)),
                     getTagsFromArgs(matcher.group("tagArguments"))
             );
         }catch (IllegalValueException ive) {
@@ -152,19 +153,7 @@ public class Parser {
         }
     }
 
-    private List<Date> findDatesInDateGroup(List<DateGroup> groups) {
-        List<Date> dates = new ArrayList<Date>();
-        
-        for(DateGroup group : groups) {
-            /* if any Dates are present in current group then add them to dateList */
-            if (group.getDates() != null) {
-                    dates.addAll(group.getDates());
-            }            
-        }
-        return dates;
-    }
     
-
 
     /**
      * Extracts the new task's tags from the add command's tag arguments string.

@@ -1,5 +1,6 @@
 package seedu.address.model.task;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import seedu.address.model.tag.UniqueTagList;
@@ -13,8 +14,8 @@ public interface ReadOnlyNonFloatingTask {
      */
     UniqueTagList getTags();
 
-    Date getStartDateAndTime();
-    Date getEndDateAndTime();
+    TaskDate getStartTaskDate();
+    TaskDate getEndTaskDate();
     
     /**
      * Returns true if both have the same state. (interfaces cannot override .equals)
@@ -23,8 +24,8 @@ public interface ReadOnlyNonFloatingTask {
         return other == this // short circuit if same object
                 || (other != null // this is first to avoid NPE below
                 && other.getName().equals(this.getName()) // state checks here onwards
-                && other.getStartDateAndTime().equals(this.getStartDateAndTime())
-                && other.getEndDateAndTime().equals(this.getEndDateAndTime())
+                && other.getStartTaskDate().equals(this.getStartTaskDate())
+                && other.getEndTaskDate().equals(this.getEndTaskDate())
                 );
     }
 
@@ -33,9 +34,10 @@ public interface ReadOnlyNonFloatingTask {
      */
     default String getAsText() {
         final StringBuilder builder = new StringBuilder();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, MMM d, h:mm a");
         builder.append(getName())
-                .append(" Start Date: " + getStartDateAndTime().toString())
-                .append(" End Date: " + getEndDateAndTime().toString())
+                .append(" Start Date: " + dateFormatter.format(getStartTaskDate().getParsedDate()))
+                .append(" End Date: " + dateFormatter.format(getEndTaskDate().getParsedDate()))
                 .append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();

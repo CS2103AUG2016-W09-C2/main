@@ -1,6 +1,8 @@
 package seedu.address.logic;
 
 import com.google.common.eventbus.Subscribe;
+import com.joestelmach.natty.DateGroup;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,6 +25,7 @@ import seedu.address.storage.StorageManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -145,7 +148,7 @@ public class LogicManagerTest {
         assertCommandBehavior("clear", ClearCommand.MESSAGE_SUCCESS, new TaskList(), Collections.emptyList());
     }
 
-
+    /** Floating Task */
     @Test
     public void execute_add_invalidArgsFormat() throws Exception {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddFloatingCommand.MESSAGE_USAGE);
@@ -163,26 +166,25 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void execute_add_successful() throws Exception {
+    public void execute_add_floating_successful() throws Exception {
         // setup expectations
         TestDataHelper helper = new TestDataHelper();
-        FloatingTask toBeAdded = helper.adam();
+        FloatingTask toBeAdded = helper.floatingTask();
         TaskList expectedAB = new TaskList();
         expectedAB.addFloatingTask(toBeAdded);
 
         // execute command and verify result
-        assertCommandBehavior(helper.generateAddCommand(toBeAdded),
+        assertCommandBehavior(helper.generateAddFloatingCommand(toBeAdded),
                 String.format(AddFloatingCommand.MESSAGE_SUCCESS, toBeAdded),
                 expectedAB,
                 expectedAB.getTaskList());
-
     }
 
     @Test
-    public void execute_addDuplicate_notAllowed() throws Exception {
+    public void execute_addDuplicate_floating_notAllowed() throws Exception {
         // setup expectations
         TestDataHelper helper = new TestDataHelper();
-        FloatingTask toBeAdded = helper.adam();
+        FloatingTask toBeAdded = helper.floatingTask();
         TaskList expectedAB = new TaskList();
         expectedAB.addFloatingTask(toBeAdded);
 
@@ -191,13 +193,28 @@ public class LogicManagerTest {
 
         // execute command and verify result
         assertCommandBehavior(
-                helper.generateAddCommand(toBeAdded),
+                helper.generateAddFloatingCommand(toBeAdded),
                 AddFloatingCommand.MESSAGE_DUPLICATE_TASK,
                 expectedAB,
                 expectedAB.getTaskList());
 
     }
 
+    /** Non Floating Task */
+    @Test
+    public void execute_add_non_floating_successful() throws Exception {
+        // setup expectations
+        TestDataHelper helper = new TestDataHelper();
+        NonFloatingTask toBeAdded = helper.nonFloatingTask();
+        TaskList expectedAB = new TaskList();
+        expectedAB.addNonFloatingTask(toBeAdded);
+
+        // execute command and verify result
+        assertCommandBehavior(helper.generateAddNonFloatingCommand(toBeAdded),
+                String.format(AddNonFloatingCommand.MESSAGE_SUCCESS, toBeAdded),
+                expectedAB,
+                expectedAB.getTaskList());    
+    }
 
     @Test
     public void execute_list_showsAllTasks() throws Exception {
@@ -372,12 +389,30 @@ public class LogicManagerTest {
      */
     class TestDataHelper{
 
-        FloatingTask adam() throws Exception {
-            Name name = new Name("go shopping with Adam Brown");
+        FloatingTask floatingTask() throws Exception {
+            Name name = new Name("Add floating task");
             Tag tag1 = new Tag("tag1");
             Tag tag2 = new Tag("tag2");
             UniqueTagList tags = new UniqueTagList(tag1, tag2);
             return new FloatingTask(name, tags);
+        }
+        
+        NonFloatingTask nonFloatingTask() throws Exception {
+            Name name = new Name("Add non floating task");
+            com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+            final String rawStartDate = "19 jun 6pm";
+            final String rawEndDate = "20 sep 10am";
+            List<DateGroup> startDateGroup = nattyParser.parse(rawStartDate);
+            List<DateGroup> endDateGroup = nattyParser.parse(rawEndDate);
+            TaskDate startDate = new TaskDate(rawStartDate, startDateGroup.get(0).getDates().get(0));
+            TaskDate endDate = new TaskDate(rawEndDate, endDateGroup.get(0).getDates().get(0));
+            Tag tag1 = new Tag("tag1");
+            Tag tag2 = new Tag("tag2");
+            UniqueTagList tags = new UniqueTagList(tag1, tag2);
+            return new NonFloatingTask(name, 
+                    startDate,
+                    endDate,
+                    tags);
         }
 
         /**
@@ -394,8 +429,8 @@ public class LogicManagerTest {
             );
         }
 
-        /** Generates the correct add command based on the task given */
-        String generateAddCommand(FloatingTask p) {
+        /** Generates the correct add command based on the floating task given */
+        String generateAddFloatingCommand(FloatingTask p) {
             StringBuffer cmd = new StringBuffer();
 
             cmd.append("add ");
@@ -410,6 +445,24 @@ public class LogicManagerTest {
             return cmd.toString();
         }
 
+        /** Generates the correct add command based on non floating the task given */
+        String generateAddNonFloatingCommand(NonFloatingTask p) {
+            StringBuffer cmd = new StringBuffer();
+
+            cmd.append("add ");
+
+            cmd.append(p.getName().toString());
+            cmd.append(" from ").append(p.getStartTaskDate().getRawDateInput());
+            cmd.append(" to ").append(p.getEndTaskDate().getRawDateInput());
+
+            UniqueTagList tags = p.getTags();
+            for(Tag t: tags){
+                cmd.append(" t/").append(t.tagName);
+            }
+
+            return cmd.toString();
+        }        
+        
         /**
          * Generates an TaskList with auto-generated tasks.
          */
