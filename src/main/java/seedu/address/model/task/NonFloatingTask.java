@@ -1,23 +1,23 @@
 package seedu.address.model.task;
 
-import java.util.Date;
-
+import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.tag.UniqueTagList;
 
 public class NonFloatingTask extends Task implements ReadOnlyNonFloatingTask {
 
     private TaskDate start, end;
-    
     public NonFloatingTask(){}
     
     public NonFloatingTask(Name name, TaskDate start, TaskDate end, UniqueTagList uniqueTagList) {
         super(name, uniqueTagList);
         this.start = start;
         this.end = end;
+
     }
     
     /**
      * Copy constructor.
+     * @throws IllegalValueException 
      */
     public NonFloatingTask(ReadOnlyNonFloatingTask source) {
         this(source.getName(), source.getStartTaskDate(), source.getEndTaskDate(), source.getTags());
@@ -30,6 +30,10 @@ public class NonFloatingTask extends Task implements ReadOnlyNonFloatingTask {
     
     public TaskDate getEndTaskDate() {
         return end;
+    }
+    
+    public boolean isValidTimeSlot(){
+    	return start.getParsedDate().before(end.getParsedDate());
     }
     
     @Override

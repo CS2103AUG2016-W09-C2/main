@@ -1,13 +1,11 @@
 package seedu.address.logic.commands;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
-import seedu.address.model.task.FloatingTask;
 import seedu.address.model.task.Name;
 import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.TaskDate;
@@ -17,10 +15,11 @@ public class AddNonFloatingCommand extends AddCommand {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a non floating task to the task list. "
             + "Parameters: add TASK_NAME [start/DATE TIME] end/DATE TIME [tag/TAG]...\n"
             + "Example: " + COMMAND_WORD
-            + " Do homework 24sep 6pm to 29sep 10am t/highPriority";
+            + " Do homework from 24 sep 6pm to 29 sep 10am t/highPriority";
 
     public static final String MESSAGE_SUCCESS = "New non floating task added: %1$s";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists in the task list";
+    private static final String MESSAGE_ILLEGAL_TIME_SLOT = "End time must be later than Start time.";
 
     private final NonFloatingTask toAdd;
 
@@ -41,6 +40,8 @@ public class AddNonFloatingCommand extends AddCommand {
                 new TaskDate(end),
                 new UniqueTagList(tagSet)
         );
+        if(!this.toAdd.isValidTimeSlot())
+        	throw new IllegalValueException(MESSAGE_ILLEGAL_TIME_SLOT);
     }
 
     @Override
