@@ -6,6 +6,7 @@ import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.ReadOnlyFloatingTask;
 import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.model.task.UniqueTaskList;
+import seedu.address.model.task.UniqueTaskList.TimeslotOverlapException;
 
 import java.util.Set;
 
@@ -27,8 +28,9 @@ public interface Model {
     /** Adds the given floating task */
     void addFloatingTask(FloatingTask task) throws UniqueTaskList.DuplicateTaskException;
     
-    /** Adds the given non floating task */
-    void addNonFloatingTask(NonFloatingTask task) throws UniqueTaskList.DuplicateTaskException;
+    /** Adds the given non floating task 
+     * @throws TimeslotOverlapException */
+    void addNonFloatingTask(NonFloatingTask task) throws UniqueTaskList.DuplicateTaskException, TimeslotOverlapException;
     
     /** Returns the filtered task list as an {@code UnmodifiableObservableList<ReadOnlyTask>} */
     UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredFloatingTaskList();

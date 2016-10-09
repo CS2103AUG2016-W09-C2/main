@@ -10,6 +10,7 @@ import seedu.address.model.task.Name;
 import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.TaskDate;
 import seedu.address.model.task.UniqueTaskFloatingList;
+import seedu.address.model.task.UniqueTaskList.TimeslotOverlapException;
 
 public class AddNonFloatingCommand extends AddCommand {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a non floating task to the task list. "
@@ -20,6 +21,7 @@ public class AddNonFloatingCommand extends AddCommand {
     public static final String MESSAGE_SUCCESS = "New non floating task added: %1$s";
     public static final String MESSAGE_DUPLICATE_TASK = "This task already exists in the task list";
     public static final String MESSAGE_ILLEGAL_TIME_SLOT = "End time must be later than Start time.";
+    public static final String MESSAGE_TIMESLOT_OCCUPIED = "This timeslot is already blocked or overlapped with existing tasks.";
 
     private final NonFloatingTask toAdd;
 
@@ -52,7 +54,10 @@ public class AddNonFloatingCommand extends AddCommand {
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
         } catch (UniqueTaskFloatingList.DuplicateTaskException e) {
             return new CommandResult(MESSAGE_DUPLICATE_TASK);
-        }
+        } catch (TimeslotOverlapException e) {
+			// TODO Auto-generated catch block
+        	return new CommandResult(MESSAGE_TIMESLOT_OCCUPIED);
+		}
 
     }
 }

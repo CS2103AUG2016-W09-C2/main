@@ -21,16 +21,33 @@ public class UniqueTaskNonFloatingList extends UniqueTaskList implements Iterabl
         assert toCheck != null;
         return internalList.contains(toCheck);
     }
+    
+    /**
+     * Returns true if the given task requests to use a blocked timeslot.
+     */
+    public boolean overlaps(ReadOnlyNonFloatingTask toCheck) {
+        assert toCheck != null;
+        for(NonFloatingTask t: internalList){
+        	if(!(t.getEndTaskDate().getParsedDate().before(toCheck.getStartTaskDate().getParsedDate())||
+        	t.getStartTaskDate().getParsedDate().after(toCheck.getEndTaskDate().getParsedDate())))
+        		return true;
+        }
+        return false;
+    }
 
     /**
      * Adds a task to the list.
      *
      * @throws DuplicateTaskException if the task to add is a duplicate of an existing task in the list.
+     * @throws TimeslotOverlapException 
      */
-    public void add(NonFloatingTask toAdd) throws DuplicateTaskException {
+    public void add(NonFloatingTask toAdd) throws DuplicateTaskException, TimeslotOverlapException {
         assert toAdd != null;
         if (contains(toAdd)) {
             throw new DuplicateTaskException();
+        }
+        if (overlaps(toAdd)){
+        	throw new TimeslotOverlapException();
         }
         internalList.add(toAdd);
     }

@@ -1,6 +1,7 @@
 package seedu.address.model.task;
 
 import seedu.address.commons.exceptions.DuplicateDataException;
+import seedu.address.commons.exceptions.IllegalValueException;
 
 public class UniqueTaskList {
     /**
@@ -17,5 +18,16 @@ public class UniqueTaskList {
      * there is no such matching task in the list.
      */
     public static class TaskNotFoundException extends Exception {}
+    
+    /**
+     * Signals that an operation adding/blocking a time slot in the list would fail because
+     * the timeslot is already occupied.
+     */
+    
+    public static class TimeslotOverlapException extends IllegalValueException {
 
+		public TimeslotOverlapException() {
+			super("Operation cannot be done due to overlapping with blocked slots.");
+			// TODO Auto-generated constructor stub
+		}}
 }

@@ -10,6 +10,7 @@ import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.model.task.Task;
 import seedu.address.model.task.UniqueTaskFloatingList;
 import seedu.address.model.task.UniqueTaskList.DuplicateTaskException;
+import seedu.address.model.task.UniqueTaskList.TimeslotOverlapException;
 import seedu.address.model.task.UniqueTaskNonFloatingList;
 
 import java.util.*;
@@ -98,7 +99,7 @@ public class TaskList implements ReadOnlyTaskList {
         floatingTasks.add(t);
     }
     
-    public void addNonFloatingTask(NonFloatingTask t) throws DuplicateTaskException {
+    public void addNonFloatingTask(NonFloatingTask t) throws DuplicateTaskException, TimeslotOverlapException {
         syncTagsWithMasterList(t);
         nonFloatingTasks.add(t);
     }
