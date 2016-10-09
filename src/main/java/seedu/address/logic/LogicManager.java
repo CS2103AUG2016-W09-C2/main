@@ -8,6 +8,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.parser.Parser;
 import seedu.address.model.Model;
 import seedu.address.model.task.ReadOnlyFloatingTask;
+import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.storage.Storage;
 
 import java.util.logging.Logger;
@@ -39,8 +40,13 @@ public class LogicManager extends ComponentManager implements Logic {
     }
 
     @Override
-    public ObservableList<ReadOnlyFloatingTask> getFilteredTaskList() {
-        return model.getFilteredTaskList();
+    public ObservableList<ReadOnlyFloatingTask> getFilteredFloatingTaskList() {
+        return model.getFilteredFloatingTaskList();
+    }
+
+    @Override
+    public ObservableList<ReadOnlyNonFloatingTask> getFilteredNonFloatingTaskList() {
+        return model.getFilteredNonFloatingTaskList();
     }
     
 }

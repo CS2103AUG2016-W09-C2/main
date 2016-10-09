@@ -60,7 +60,7 @@ public class StorageManager extends ComponentManager implements Storage {
 
     @Override
     public void saveTaskList(ReadOnlyTaskList taskList) throws IOException {
-        taskListStorage.saveTaskList(taskList, taskListStorage.getTaskListFilePath());
+        //taskListStorage.saveTaskList(taskList, taskListStorage.getTaskListFilePath());
     }
 
 

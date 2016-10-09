@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * An Immutable TaskList that is serializable to XML format
  */
 @XmlRootElement(name = "tasklist")
-public class XmlSerializableTaskList implements ReadOnlyTaskList {
+public class XmlSerializableFloatingTaskList implements ReadOnlyTaskList {
 
     @XmlElement
     private List<XmlAdaptedTask> tasks;
@@ -32,12 +32,12 @@ public class XmlSerializableTaskList implements ReadOnlyTaskList {
     /**
      * Empty constructor required for marshalling
      */
-    public XmlSerializableTaskList() {}
+    public XmlSerializableFloatingTaskList() {}
 
     /**
      * Conversion
      */
-    public XmlSerializableTaskList(ReadOnlyTaskList src) {
+    public XmlSerializableFloatingTaskList(ReadOnlyTaskList src) {
         tasks.addAll(src.getTaskList().stream().map(XmlAdaptedTask::new).collect(Collectors.toList()));
         tags = src.getTagList();
     }

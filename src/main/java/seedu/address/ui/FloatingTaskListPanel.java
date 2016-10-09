@@ -10,7 +10,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import seedu.address.commons.events.ui.TaskPanelSelectionChangedEvent;
+import seedu.address.commons.events.ui.FloatingTaskPanelSelectionChangedEvent;
 import seedu.address.model.task.ReadOnlyFloatingTask;
 import seedu.address.commons.core.LogsCenter;
 
@@ -19,16 +19,16 @@ import java.util.logging.Logger;
 /**
  * Panel containing the list of tasks.
  */
-public class TaskListPanel extends UiPart {
-    private final Logger logger = LogsCenter.getLogger(TaskListPanel.class);
-    private static final String FXML = "TaskListPanel.fxml";
+public class FloatingTaskListPanel extends UiPart {
+    private final Logger logger = LogsCenter.getLogger(FloatingTaskListPanel.class);
+    private static final String FXML = "FloatingTaskListPanel.fxml";
     private VBox panel;
     private AnchorPane placeHolderPane;
 
     @FXML
-    private ListView<ReadOnlyFloatingTask> taskListView;
+    private ListView<ReadOnlyFloatingTask> floatingTaskListView;
 
-    public TaskListPanel() {
+    public FloatingTaskListPanel() {
         super();
     }
 
@@ -47,10 +47,10 @@ public class TaskListPanel extends UiPart {
         this.placeHolderPane = pane;
     }
 
-    public static TaskListPanel load(Stage primaryStage, AnchorPane taskListPlaceholder,
+    public static FloatingTaskListPanel load(Stage primaryStage, AnchorPane taskListPlaceholder,
                                        ObservableList<ReadOnlyFloatingTask> taskList) {
-        TaskListPanel taskListPanel =
-                UiPartLoader.loadUiPart(primaryStage, taskListPlaceholder, new TaskListPanel());
+        FloatingTaskListPanel taskListPanel =
+                UiPartLoader.loadUiPart(primaryStage, taskListPlaceholder, new FloatingTaskListPanel());
         taskListPanel.configure(taskList);
         return taskListPanel;
     }
@@ -61,8 +61,8 @@ public class TaskListPanel extends UiPart {
     }
 
     private void setConnections(ObservableList<ReadOnlyFloatingTask> taskList) {
-        taskListView.setItems(taskList);
-        taskListView.setCellFactory(listView -> new TaskListViewCell());
+        floatingTaskListView.setItems(taskList);
+        floatingTaskListView.setCellFactory(listView -> new FloatingTaskListViewCell());
         setEventHandlerForSelectionChangeEvent();
     }
 
@@ -72,24 +72,24 @@ public class TaskListPanel extends UiPart {
     }
 
     private void setEventHandlerForSelectionChangeEvent() {
-        taskListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        floatingTaskListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 logger.fine("Selection in task list panel changed to : '" + newValue + "'");
-                raise(new TaskPanelSelectionChangedEvent(newValue));
+                raise(new FloatingTaskPanelSelectionChangedEvent(newValue));
             }
         });
     }
 
     public void scrollTo(int index) {
         Platform.runLater(() -> {
-            taskListView.scrollTo(index);
-            taskListView.getSelectionModel().clearAndSelect(index);
+            floatingTaskListView.scrollTo(index);
+            floatingTaskListView.getSelectionModel().clearAndSelect(index);
         });
     }
 
-    class TaskListViewCell extends ListCell<ReadOnlyFloatingTask> {
+    class FloatingTaskListViewCell extends ListCell<ReadOnlyFloatingTask> {
 
-        public TaskListViewCell() {
+        public FloatingTaskListViewCell() {
         }
 
         @Override
@@ -100,7 +100,7 @@ public class TaskListPanel extends UiPart {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(TaskCard.load(task, getIndex() + 1).getLayout());
+                setGraphic(FloatingTaskCard.load(task, getIndex() + 1).getLayout());
             }
         }
     }

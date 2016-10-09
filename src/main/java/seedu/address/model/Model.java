@@ -4,9 +4,12 @@ import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.model.task.FloatingTask;
 import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.ReadOnlyFloatingTask;
+import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.model.task.UniqueTaskList;
 
 import java.util.Set;
+
+import javafx.collections.ObservableList;
 
 /**
  * The API of the Model component.
@@ -28,15 +31,22 @@ public interface Model {
     void addNonFloatingTask(NonFloatingTask task) throws UniqueTaskList.DuplicateTaskException;
     
     /** Returns the filtered task list as an {@code UnmodifiableObservableList<ReadOnlyTask>} */
-    UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredTaskList();
+    UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredFloatingTaskList();
 
-    /** Updates the filter of the filtered task list to show all tasks */
-    void updateFilteredListToShowAll();
+    UnmodifiableObservableList<ReadOnlyNonFloatingTask> getFilteredNonFloatingTaskList();
+    
+    /** Updates the filter of the filtered task list to show all floating tasks */
+    void updateFilteredFloatingListToShowAll();
+
+    /** Updates the filter of the filtered task list to show all non floating tasks */
+    void updateFilteredNonFloatingListToShowAll();
+    
+    /** Updates the filter of the filtered task list to filter by the given keywords*/
+    void updateFilteredFloatingTaskList(Set<String> keywords);
 
     /** Updates the filter of the filtered task list to filter by the given keywords*/
-    void updateFilteredTaskList(Set<String> keywords);
+    void updateFilteredNonFloatingTaskList(Set<String> keywords);    
     
     /** Updates the file path for current storage manager of the model.*/
 	void changeDirectory(String filePath);
-
 }

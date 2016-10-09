@@ -30,7 +30,8 @@ public class MainWindow extends UiPart {
 
     // Independent Ui parts residing in this Ui container
     private BrowserPanel browserPanel;
-    private TaskListPanel taskListPanel;
+    private FloatingTaskListPanel floatingTaskListPanel;
+    private NonFloatingTaskListPanel nonFloatingTaskListPanel;
     private ResultDisplay resultDisplay;
     private StatusBarFooter statusBarFooter;
     private CommandBox commandBox;
@@ -53,8 +54,11 @@ public class MainWindow extends UiPart {
     private MenuItem helpMenuItem;
 
     @FXML
-    private AnchorPane taskListPanelPlaceholder;
+    private AnchorPane floatingTaskListPanelPlaceholder;
 
+    @FXML
+    private AnchorPane nonFloatingTaskListPanelPlaceholder;
+    
     @FXML
     private AnchorPane resultDisplayPlaceholder;
 
@@ -109,7 +113,8 @@ public class MainWindow extends UiPart {
 
     void fillInnerParts() {
         browserPanel = BrowserPanel.load(browserPlaceholder);
-        taskListPanel = TaskListPanel.load(primaryStage, getTaskListPlaceholder(), logic.getFilteredTaskList());
+        floatingTaskListPanel = FloatingTaskListPanel.load(primaryStage, getFloatingTaskListPlaceholder(), logic.getFilteredFloatingTaskList());
+        nonFloatingTaskListPanel = NonFloatingTaskListPanel.load(primaryStage, getNonFloatingTaskListPlaceholder(), logic.getFilteredNonFloatingTaskList());
         resultDisplay = ResultDisplay.load(primaryStage, getResultDisplayPlaceholder());
         statusBarFooter = StatusBarFooter.load(primaryStage, getStatusbarPlaceholder(), config.getTaskListFilePath());
         commandBox = CommandBox.load(primaryStage, getCommandBoxPlaceholder(), resultDisplay, logic);
@@ -127,8 +132,12 @@ public class MainWindow extends UiPart {
         return resultDisplayPlaceholder;
     }
 
-    public AnchorPane getTaskListPlaceholder() {
-        return taskListPanelPlaceholder;
+    public AnchorPane getFloatingTaskListPlaceholder() {
+        return floatingTaskListPanelPlaceholder;
+    }
+    
+    public AnchorPane getNonFloatingTaskListPlaceholder() {
+        return nonFloatingTaskListPanelPlaceholder;
     }
 
     public void hide() {
@@ -182,8 +191,8 @@ public class MainWindow extends UiPart {
         raise(new ExitAppRequestEvent());
     }
 
-    public TaskListPanel getTaskListPanel() {
-        return this.taskListPanel;
+    public FloatingTaskListPanel getTaskListPanel() {
+        return this.floatingTaskListPanel;
     }
 
     public void loadTaskPage(ReadOnlyFloatingTask task) {

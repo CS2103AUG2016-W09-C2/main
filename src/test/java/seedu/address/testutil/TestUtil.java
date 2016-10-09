@@ -20,7 +20,7 @@ import seedu.address.model.TaskList;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.task.*;
-import seedu.address.storage.XmlSerializableTaskList;
+import seedu.address.storage.XmlSerializableFloatingTaskList;
 
 import java.io.File;
 import java.io.IOException;
@@ -138,8 +138,8 @@ public class TestUtil {
         return new TaskList(new UniqueTaskFloatingList(), new UniqueTagList());
     }
 
-    public static XmlSerializableTaskList generateSampleStorageTaskList() {
-        return new XmlSerializableTaskList(generateEmptyTaskList());
+    public static XmlSerializableFloatingTaskList generateSampleStorageTaskList() {
+        return new XmlSerializableFloatingTaskList(generateEmptyTaskList());
     }
 
     /**

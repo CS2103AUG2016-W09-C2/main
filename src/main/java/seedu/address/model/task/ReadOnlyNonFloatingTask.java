@@ -34,10 +34,10 @@ public interface ReadOnlyNonFloatingTask {
      */
     default String getAsText() {
         final StringBuilder builder = new StringBuilder();
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, MMM d, h:mm a");
+
         builder.append(getName())
-                .append(" Start Date: " + dateFormatter.format(getStartTaskDate().getParsedDate()))
-                .append(" End Date: " + dateFormatter.format(getEndTaskDate().getParsedDate()))
+                .append(" Start Date: " + getStartTaskDate())
+                .append(" End Date: " + getEndTaskDate())
                 .append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();

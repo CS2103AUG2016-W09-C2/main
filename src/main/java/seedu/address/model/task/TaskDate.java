@@ -1,5 +1,6 @@
 package seedu.address.model.task;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TaskDate {
@@ -25,5 +26,10 @@ public class TaskDate {
     
     public Date getParsedDate() {
         return parsedDate;
+    }
+    
+    public String toString() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, MMM d, h:mm a");
+        return dateFormatter.format(parsedDate);
     }
 }

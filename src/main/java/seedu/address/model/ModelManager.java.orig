@@ -8,7 +8,6 @@ import seedu.address.logic.commands.Command;
 import seedu.address.model.task.FloatingTask;
 import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.ReadOnlyFloatingTask;
-import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.model.task.Task;
 import seedu.address.model.task.UniqueTaskFloatingList;
 import seedu.address.model.task.UniqueTaskList.DuplicateTaskException;
@@ -29,9 +28,14 @@ public class ModelManager extends ComponentManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
     private final TaskList taskList;
+<<<<<<< a892620c2a0110457f46ab6285c9fbf9dcc91775
+    private final FilteredList<FloatingTask> filteredTasks;
+    
+=======
     private final FilteredList<FloatingTask> filteredFloatingTasks;
     private final FilteredList<NonFloatingTask> filteredNonFloatingTasks;
-    
+
+>>>>>>> Refactor till no more errors.
     /**
      * Initializes a ModelManager with the given TaskList
      * TaskList and its variables should not be null
@@ -73,7 +77,7 @@ public class ModelManager extends ComponentManager implements Model {
     private void indicateTaskListChanged() {
         raise(new TaskListChangedEvent(taskList));
     }
-    
+
     @Override
     public synchronized void deleteTask(ReadOnlyFloatingTask target) throws TaskNotFoundException {
         taskList.removeTask(target);
@@ -83,14 +87,14 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void addFloatingTask(FloatingTask task) throws DuplicateTaskException {
         taskList.addFloatingTask(task);
-        updateFilteredFloatingListToShowAll();
+        updateFilteredListToShowAll();
         indicateTaskListChanged();
     }
 
     @Override
     public synchronized void addNonFloatingTask(NonFloatingTask task) throws DuplicateTaskException {
         taskList.addNonFloatingTask(task);
-        updateFilteredNonFloatingListToShowAll();
+        updateFilteredListToShowAll();
         indicateTaskListChanged();
     }    
     
@@ -103,48 +107,28 @@ public class ModelManager extends ComponentManager implements Model {
     //=========== Filtered Task List Accessors ===============================================================
 
     @Override
-    public UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredFloatingTaskList() {
+    public UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredTaskList() {
         return new UnmodifiableObservableList<>(filteredFloatingTasks);
-    }
-    
-    @Override
-    public UnmodifiableObservableList<ReadOnlyNonFloatingTask> getFilteredNonFloatingTaskList() {
-        return new UnmodifiableObservableList<>(filteredNonFloatingTasks);
     }
 
     @Override
-    public void updateFilteredFloatingListToShowAll() {
+    public void updateFilteredListToShowAll() {
         filteredFloatingTasks.setPredicate(null);
     }
 
     @Override
-    public void updateFilteredNonFloatingListToShowAll() {
-        filteredNonFloatingTasks.setPredicate(null);
-    }    
-    
-    @Override
-    public void updateFilteredFloatingTaskList(Set<String> keywords){
-        updateFilteredFloatingTaskList(new PredicateExpression(new NameQualifier(keywords)));
+    public void updateFilteredTaskList(Set<String> keywords){
+        updateFilteredTaskList(new PredicateExpression(new NameQualifier(keywords)));
     }
 
-    @Override
-    public void updateFilteredNonFloatingTaskList(Set<String> keywords){
-        updateFilteredNonFloatingTaskList(new PredicateExpression(new NameQualifier(keywords)));
-    }    
-    
-    private void updateFilteredFloatingTaskList(Expression expression) {
+    private void updateFilteredTaskList(Expression expression) {
         filteredFloatingTasks.setPredicate(expression::satisfies);
-    }
-    
-    private void updateFilteredNonFloatingTaskList(Expression expression) {
-        filteredNonFloatingTasks.setPredicate(expression::satisfies);
     }
 
     //========== Inner classes/interfaces used for filtering ==================================================
 
     interface Expression {
         boolean satisfies(ReadOnlyFloatingTask task);
-        boolean satisfies(ReadOnlyNonFloatingTask task);
         String toString();
     }
 
@@ -160,11 +144,6 @@ public class ModelManager extends ComponentManager implements Model {
         public boolean satisfies(ReadOnlyFloatingTask task) {
             return qualifier.run(task);
         }
-        
-        @Override
-        public boolean satisfies(ReadOnlyNonFloatingTask task) {
-            return qualifier.run(task);
-        }
 
         @Override
         public String toString() {
@@ -174,7 +153,6 @@ public class ModelManager extends ComponentManager implements Model {
 
     interface Qualifier {
         boolean run(ReadOnlyFloatingTask task);
-        boolean run(ReadOnlyNonFloatingTask task);
         String toString();
     }
 
@@ -193,14 +171,6 @@ public class ModelManager extends ComponentManager implements Model {
                     .isPresent();
         }
 
-        @Override
-        public boolean run(ReadOnlyNonFloatingTask task) {
-            return nameKeyWords.stream()
-                    .filter(keyword -> StringUtil.containsIgnoreCase(task.getName().fullName, keyword))
-                    .findAny()
-                    .isPresent();
-        }        
-        
         @Override
         public String toString() {
             return "name=" + String.join(", ", nameKeyWords);

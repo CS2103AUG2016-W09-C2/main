@@ -4,11 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import seedu.address.model.task.ReadOnlyFloatingTask;
+import seedu.address.model.task.ReadOnlyNonFloatingTask;
 
-public class TaskCard extends UiPart{
+public class NonFloatingTaskCard extends UiPart{
 
-    private static final String FXML = "FloatingTaskListCard.fxml";
+    private static final String FXML = "NonFloatingTaskListCard.fxml";
 
     @FXML
     private HBox cardPane;
@@ -16,18 +16,22 @@ public class TaskCard extends UiPart{
     private Label name;
     @FXML
     private Label id;
+    @FXML 
+    private Label startDate;
+    @FXML
+    private Label endDate;
     @FXML
     private Label tags;
 
-    private ReadOnlyFloatingTask task;
+    private ReadOnlyNonFloatingTask task;
     private int displayedIndex;
 
-    public TaskCard(){
+    public NonFloatingTaskCard() {
 
     }
 
-    public static TaskCard load(ReadOnlyFloatingTask task, int displayedIndex){
-        TaskCard card = new TaskCard();
+    public static NonFloatingTaskCard load(ReadOnlyNonFloatingTask task, int displayedIndex){
+        NonFloatingTaskCard card = new NonFloatingTaskCard();
         card.task = task;
         card.displayedIndex = displayedIndex;
         return UiPartLoader.loadUiPart(card);
@@ -37,6 +41,8 @@ public class TaskCard extends UiPart{
     public void initialize() {
         name.setText(task.getName().fullName);
         id.setText(displayedIndex + ". ");
+        startDate.setText("Start: " + task.getStartTaskDate().toString());
+        endDate.setText("End: " + task.getEndTaskDate().toString());
         tags.setText(task.tagsString());
     }
 

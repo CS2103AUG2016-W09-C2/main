@@ -62,7 +62,7 @@ public class XmlTaskListStorage implements TaskListStorage {
 
         File file = new File(filePath);
         FileUtil.createIfMissing(file);
-        XmlFileStorage.saveDataToFile(file, new XmlSerializableTaskList(taskList));
+        XmlFileStorage.saveDataToFile(file, new XmlSerializableFloatingTaskList(taskList));
     }
 
     @Override
