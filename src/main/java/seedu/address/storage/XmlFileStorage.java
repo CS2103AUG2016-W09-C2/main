@@ -14,7 +14,7 @@ public class XmlFileStorage {
     /**
      * Saves the given task list data to the specified file.
      */
-    public static void saveDataToFile(File file, XmlSerializableFloatingTaskList taskList)
+    public static void saveDataToFile(File file, XmlSerializableTaskList taskList)
             throws FileNotFoundException {
         try {
             XmlUtil.saveDataToFile(file, taskList);
@@ -26,10 +26,10 @@ public class XmlFileStorage {
     /**
      * Returns address book in the file or an empty address book
      */
-    public static XmlSerializableFloatingTaskList loadDataFromSaveFile(File file) throws DataConversionException,
+    public static XmlSerializableTaskList loadDataFromSaveFile(File file) throws DataConversionException,
                                                                             FileNotFoundException {
         try {
-            return XmlUtil.getDataFromFile(file, XmlSerializableFloatingTaskList.class);
+            return XmlUtil.getDataFromFile(file, XmlSerializableTaskList.class);
         } catch (JAXBException e) {
             throw new DataConversionException(e);
         }

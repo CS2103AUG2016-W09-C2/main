@@ -1,18 +1,12 @@
 package seedu.address.model.task;
 
-import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.tag.UniqueTagList;
-
-import java.util.Objects;
 
 /**
  * Represents a floating task in the task list.
  * Guarantees: details are present and not null, field values are validated.
  */
 public class FloatingTask extends Task implements ReadOnlyFloatingTask {
-
-    private Name name;
-    private UniqueTagList tags;
     
     /**
      * Every field must be present and not null.

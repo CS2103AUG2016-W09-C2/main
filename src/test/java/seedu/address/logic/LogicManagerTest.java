@@ -177,7 +177,7 @@ public class LogicManagerTest {
         assertCommandBehavior(helper.generateAddFloatingCommand(toBeAdded),
                 String.format(AddFloatingCommand.MESSAGE_SUCCESS, toBeAdded),
                 expectedAB,
-                expectedAB.getTaskList());
+                expectedAB.getFloatingTaskList());
     }
 
     @Test
@@ -196,7 +196,7 @@ public class LogicManagerTest {
                 helper.generateAddFloatingCommand(toBeAdded),
                 AddFloatingCommand.MESSAGE_DUPLICATE_TASK,
                 expectedAB,
-                expectedAB.getTaskList());
+                expectedAB.getFloatingTaskList());
 
     }
 
@@ -213,7 +213,7 @@ public class LogicManagerTest {
         assertCommandBehavior(helper.generateAddNonFloatingCommand(toBeAdded),
                 String.format(AddNonFloatingCommand.MESSAGE_SUCCESS, toBeAdded),
                 expectedAB,
-                expectedAB.getTaskList());    
+                expectedAB.getFloatingTaskList());    
     }
 
     @Test
@@ -221,7 +221,7 @@ public class LogicManagerTest {
         // prepare expectations
         TestDataHelper helper = new TestDataHelper();
         TaskList expectedAB = helper.generateTaskList(2);
-        List<? extends ReadOnlyFloatingTask> expectedList = expectedAB.getTaskList();
+        List<? extends ReadOnlyFloatingTask> expectedList = expectedAB.getFloatingTaskList();
 
         // prepare task list state
         helper.addToModel(model, 2);
@@ -287,7 +287,7 @@ public class LogicManagerTest {
         assertCommandBehavior("select 2",
                 String.format(SelectCommand.MESSAGE_SELECT_TASK_SUCCESS, 2),
                 expectedAB,
-                expectedAB.getTaskList());
+                expectedAB.getFloatingTaskList());
         assertEquals(1, targetedJumpIndex);
         assertEquals(model.getFilteredFloatingTaskList().get(1), threeTasks.get(1));
     }
@@ -316,7 +316,7 @@ public class LogicManagerTest {
         assertCommandBehavior("delete 2",
                 String.format(DeleteCommand.MESSAGE_DELETE_TASK_SUCCESS, threeTasks.get(1)),
                 expectedAB,
-                expectedAB.getTaskList());
+                expectedAB.getFloatingTaskList());
     }
 
 

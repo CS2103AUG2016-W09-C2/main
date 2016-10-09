@@ -29,6 +29,9 @@ public class TaskDate {
     }
     
     public String toString() {
+        if (parsedDate == null) {
+            return rawDateInput;
+        }
         SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, MMM d, h:mm a");
         return dateFormatter.format(parsedDate);
     }

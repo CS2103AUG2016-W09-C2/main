@@ -6,6 +6,7 @@ import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.task.FloatingTask;
 import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.ReadOnlyFloatingTask;
+import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.model.task.Task;
 import seedu.address.model.task.UniqueTaskFloatingList;
 import seedu.address.model.task.UniqueTaskList.DuplicateTaskException;
@@ -36,14 +37,14 @@ public class TaskList implements ReadOnlyTaskList {
      * Tasks and Tags are copied into this task list
      */
     public TaskList(ReadOnlyTaskList toBeCopied) {
-        this(toBeCopied.getUniqueTaskList(), toBeCopied.getUniqueTagList());
+        this(toBeCopied.getUniqueFloatingTaskList(), toBeCopied.getUniqueNonFloatingTaskList(), toBeCopied.getUniqueTagList());
     }
 
     /**
      * Tasks and Tags are copied into this task list
      */
-    public TaskList(UniqueTaskFloatingList tasks, UniqueTagList tags) {
-        resetData(tasks.getInternalList(), tags.getInternalList());
+    public TaskList(UniqueTaskFloatingList floatingTasks, UniqueTaskNonFloatingList nonFloatingTask, UniqueTagList tags) {
+        resetData(floatingTasks.getInternalList(), nonFloatingTask.getInternalList(), tags.getInternalList());
     }
 
     public static ReadOnlyTaskList getEmptyTaskList() {
@@ -59,7 +60,7 @@ public class TaskList implements ReadOnlyTaskList {
     public void setFloatingTasks(List<FloatingTask> tasks) {
         this.floatingTasks.getInternalList().setAll(tasks);
     }
-    
+
     public ObservableList<NonFloatingTask> getNonFloatingTasks() {
         return nonFloatingTasks.getInternalList();
     }
@@ -72,13 +73,15 @@ public class TaskList implements ReadOnlyTaskList {
         this.tags.getInternalList().setAll(tags);
     }
 
-    public void resetData(Collection<? extends ReadOnlyFloatingTask> newTasks, Collection<Tag> newTags) {
-        setFloatingTasks(newTasks.stream().map(FloatingTask::new).collect(Collectors.toList()));
+    public void resetData(Collection<? extends ReadOnlyFloatingTask> newFloatingTasks, 
+            Collection<? extends ReadOnlyNonFloatingTask> newNonFloatingTasks, Collection<Tag> newTags) {
+        setFloatingTasks(newFloatingTasks.stream().map(FloatingTask::new).collect(Collectors.toList()));
+        setNonFloatingTasks(newNonFloatingTasks.stream().map(NonFloatingTask::new).collect(Collectors.toList()));
         setTags(newTags);
     }
 
     public void resetData(ReadOnlyTaskList newData) {
-        resetData(newData.getTaskList(), newData.getTagList());
+        resetData(newData.getFloatingTaskList(), newData.getNonFloatingTaskList(), newData.getTagList());
     }
 
 //// task-level operations
@@ -146,18 +149,28 @@ public class TaskList implements ReadOnlyTaskList {
     }
 
     @Override
-    public List<ReadOnlyFloatingTask> getTaskList() {
+    public List<ReadOnlyFloatingTask> getFloatingTaskList() {
         return Collections.unmodifiableList(floatingTasks.getInternalList());
     }
 
+    @Override
+    public List<ReadOnlyNonFloatingTask> getNonFloatingTaskList() {
+        return Collections.unmodifiableList(nonFloatingTasks.getInternalList());
+    }   
+    
     @Override
     public List<Tag> getTagList() {
         return Collections.unmodifiableList(tags.getInternalList());
     }
 
     @Override
-    public UniqueTaskFloatingList getUniqueTaskList() {
+    public UniqueTaskFloatingList getUniqueFloatingTaskList() {
         return this.floatingTasks;
+    }
+    
+    @Override
+    public UniqueTaskNonFloatingList getUniqueNonFloatingTaskList() {
+        return this.nonFloatingTasks;
     }
 
     @Override

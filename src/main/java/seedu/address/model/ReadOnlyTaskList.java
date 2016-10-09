@@ -4,7 +4,9 @@ package seedu.address.model;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.task.ReadOnlyFloatingTask;
+import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.model.task.UniqueTaskFloatingList;
+import seedu.address.model.task.UniqueTaskNonFloatingList;
 
 import java.util.List;
 
@@ -15,13 +17,19 @@ public interface ReadOnlyTaskList {
 
     UniqueTagList getUniqueTagList();
 
-    UniqueTaskFloatingList getUniqueTaskList();
+    UniqueTaskFloatingList getUniqueFloatingTaskList();
+    UniqueTaskNonFloatingList getUniqueNonFloatingTaskList();
+    
+    /**
+     * Returns an unmodifiable view of floating tasks list
+     */
+    List<ReadOnlyFloatingTask> getFloatingTaskList();
 
     /**
-     * Returns an unmodifiable view of tasks list
+     * Returns an unmodifiable view of non floating tasks list
      */
-    List<ReadOnlyFloatingTask> getTaskList();
-
+    List<ReadOnlyNonFloatingTask> getNonFloatingTaskList();    
+    
     /**
      * Returns an unmodifiable view of tags list
      */

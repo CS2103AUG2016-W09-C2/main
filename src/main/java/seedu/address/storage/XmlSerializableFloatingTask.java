@@ -16,46 +16,34 @@ import java.util.stream.Collectors;
 /**
  * An Immutable TaskList that is serializable to XML format
  */
-@XmlRootElement(name = "tasklist")
-public class XmlSerializableFloatingTaskList implements ReadOnlyTaskList {
+public class XmlSerializableFloatingTask {
 
     @XmlElement
-    private List<XmlAdaptedTask> tasks;
-    @XmlElement
-    private List<Tag> tags;
+    private List<XmlAdaptedFloatingTask> tasks;
 
     {
         tasks = new ArrayList<>();
-        tags = new ArrayList<>();
     }
 
     /**
      * Empty constructor required for marshalling
      */
-    public XmlSerializableFloatingTaskList() {}
+    public XmlSerializableFloatingTask() {}
 
     /**
      * Conversion
      */
-    public XmlSerializableFloatingTaskList(ReadOnlyTaskList src) {
-        tasks.addAll(src.getTaskList().stream().map(XmlAdaptedTask::new).collect(Collectors.toList()));
-        tags = src.getTagList();
+    public XmlSerializableFloatingTask(ReadOnlyTaskList src) {
+        tasks.addAll(src.getFloatingTaskList().stream().map(XmlAdaptedFloatingTask::new).collect(Collectors.toList()));
+    }
+    
+    public void addAll(ReadOnlyTaskList src) {
+        tasks.addAll(src.getFloatingTaskList().stream().map(XmlAdaptedFloatingTask::new).collect(Collectors.toList()));
     }
 
-    @Override
-    public UniqueTagList getUniqueTagList() {
-        try {
-            return new UniqueTagList(tags);
-        } catch (UniqueTagList.DuplicateTagException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
     public UniqueTaskFloatingList getUniqueTaskList() {
         UniqueTaskFloatingList lists = new UniqueTaskFloatingList();
-        for (XmlAdaptedTask p : tasks) {
+        for (XmlAdaptedFloatingTask p : tasks) {
             try {
                 lists.add(p.toModelType());
             } catch (IllegalValueException e) {
@@ -65,8 +53,7 @@ public class XmlSerializableFloatingTaskList implements ReadOnlyTaskList {
         return lists;
     }
 
-    @Override
-    public List<ReadOnlyFloatingTask> getTaskList() {
+    public List<ReadOnlyFloatingTask> getFloatingTaskList() {
         return tasks.stream().map(p -> {
             try {
                 return p.toModelType();
@@ -76,10 +63,4 @@ public class XmlSerializableFloatingTaskList implements ReadOnlyTaskList {
             }
         }).collect(Collectors.toCollection(ArrayList::new));
     }
-
-    @Override
-    public List<Tag> getTagList() {
-        return Collections.unmodifiableList(tags);
-    }
-
 }

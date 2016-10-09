@@ -8,11 +8,21 @@ public class NonFloatingTask extends Task implements ReadOnlyNonFloatingTask {
 
     private TaskDate start, end;
     
+    public NonFloatingTask(){}
+    
     public NonFloatingTask(Name name, TaskDate start, TaskDate end, UniqueTagList uniqueTagList) {
         super(name, uniqueTagList);
         this.start = start;
         this.end = end;
     }
+    
+    /**
+     * Copy constructor.
+     */
+    public NonFloatingTask(ReadOnlyNonFloatingTask source) {
+        this(source.getName(), source.getStartTaskDate(), source.getEndTaskDate(), source.getTags());
+    }
+    
     
     public TaskDate getStartTaskDate() {
         return start;
@@ -20,6 +30,13 @@ public class NonFloatingTask extends Task implements ReadOnlyNonFloatingTask {
     
     public TaskDate getEndTaskDate() {
         return end;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof ReadOnlyNonFloatingTask // instanceof handles nulls
+                && this.isSameStateAs((ReadOnlyNonFloatingTask) other));
     }
 
     @Override

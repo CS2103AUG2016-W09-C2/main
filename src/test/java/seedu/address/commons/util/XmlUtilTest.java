@@ -4,7 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import seedu.address.model.TaskList;
-import seedu.address.storage.XmlSerializableFloatingTaskList;
+import seedu.address.storage.XmlSerializableTaskList;
 import seedu.address.testutil.TaskListBuilder;
 import seedu.address.testutil.TestUtil;
 
@@ -51,8 +51,8 @@ public class XmlUtilTest {
 
     @Test
     public void getDataFromFile_validFile_validResult() throws Exception {
-        XmlSerializableFloatingTaskList dataFromFile = XmlUtil.getDataFromFile(VALID_FILE, XmlSerializableFloatingTaskList.class);
-        assertEquals(9, dataFromFile.getTaskList().size());
+        XmlSerializableTaskList dataFromFile = XmlUtil.getDataFromFile(VALID_FILE, XmlSerializableTaskList.class);
+        assertEquals(9, dataFromFile.getFloatingTaskList().size());
         assertEquals(0, dataFromFile.getTagList().size());
     }
 
@@ -77,17 +77,17 @@ public class XmlUtilTest {
     @Test
     public void saveDataToFile_validFile_dataSaved() throws Exception {
         TEMP_FILE.createNewFile();
-        XmlSerializableFloatingTaskList dataToWrite = new XmlSerializableFloatingTaskList(new TaskList());
+        XmlSerializableTaskList dataToWrite = new XmlSerializableTaskList(new TaskList());
         XmlUtil.saveDataToFile(TEMP_FILE, dataToWrite);
-        XmlSerializableFloatingTaskList dataFromFile = XmlUtil.getDataFromFile(TEMP_FILE, XmlSerializableFloatingTaskList.class);
+        XmlSerializableTaskList dataFromFile = XmlUtil.getDataFromFile(TEMP_FILE, XmlSerializableTaskList.class);
         assertEquals((new TaskList(dataToWrite)).toString(),(new TaskList(dataFromFile)).toString());
         //TODO: use equality instead of string comparisons
 
         TaskListBuilder builder = new TaskListBuilder(new TaskList());
-        dataToWrite = new XmlSerializableFloatingTaskList(builder.withTask(TestUtil.generateSampleTaskData().get(0)).withTag("Friends").build());
+        dataToWrite = new XmlSerializableTaskList(builder.withTask(TestUtil.generateSampleTaskData().get(0)).withTag("Friends").build());
 
         XmlUtil.saveDataToFile(TEMP_FILE, dataToWrite);
-        dataFromFile = XmlUtil.getDataFromFile(TEMP_FILE, XmlSerializableFloatingTaskList.class);
+        dataFromFile = XmlUtil.getDataFromFile(TEMP_FILE, XmlSerializableTaskList.class);
         assertEquals((new TaskList(dataToWrite)).toString(),(new TaskList(dataFromFile)).toString());
     }
 }
