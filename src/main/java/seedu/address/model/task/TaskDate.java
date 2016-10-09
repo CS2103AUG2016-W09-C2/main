@@ -28,11 +28,25 @@ public class TaskDate {
         return parsedDate;
     }
     
+    @Override
     public String toString() {
         if (parsedDate == null) {
             return rawDateInput;
         }
         SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, MMM d, h:mm a");
         return dateFormatter.format(parsedDate);
+    }
+    
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof TaskDate // instanceof handles nulls
+                && this.parsedDate.toGMTString().equals(((TaskDate) other).parsedDate.toGMTString())); // state check
+    }
+
+    @Override
+    public int hashCode() {
+        return parsedDate.toGMTString().hashCode();
     }
 }

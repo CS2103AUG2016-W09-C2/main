@@ -36,6 +36,11 @@ public class Parser {
                     +" from (?<startdate>[^/ a-zA-Z]+ [^/ 0-9]+ [^/ ]+)"
                     +" to (?<enddate>[^/ a-zA-Z]+ [^/ 0-9]+ [^/ ]+)"
                     + "(?<tagArguments>(?: t/[^ ]+)*)"); // variable number of tags
+    
+    private static final Pattern BLOCKED_TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
+            Pattern.compile("from (?<startdate>[^/ a-zA-Z]+ [^/ 0-9]+ [^/ ]+)"
+                    +" to (?<enddate>[^/ a-zA-Z]+ [^/ 0-9]+ [^/ ]+)"
+                    + "(?<tagArguments>(?: t/[^ ]+)*)"); // variable number of tags
 
     private static final Pattern NON_FLOATING_LAZY_TASK_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
             Pattern.compile("(?<name>[^/]+)"
@@ -66,6 +71,9 @@ public class Parser {
 
         case AddCommand.COMMAND_WORD:
             return prepareAdd(arguments);
+        
+        case BlockCommand.COMMAND_WORD:
+        	return prepareBlock(arguments);
 
         case SelectCommand.COMMAND_WORD:
             return prepareSelect(arguments);
@@ -102,14 +110,16 @@ public class Parser {
         }
     }
 
-    /**
+    
+
+	/**
      * Parses arguments in the context of the add task command.
      *
      * @param args full command args string
      * @return the prepared command
      */
     private Command prepareAdd(String args){
-       final Matcher matcher = NON_FLOATING_TASK_DATA_ARGS_FORMAT.matcher(args.trim());
+        final Matcher matcher = NON_FLOATING_TASK_DATA_ARGS_FORMAT.matcher(args.trim());
         // Validate arg string format
         if (!matcher.matches()) {
             // Try floating task
@@ -152,7 +162,28 @@ public class Parser {
             return new IncorrectCommand(ive.getMessage());
         }
     }
-
+    
+    private Command prepareBlock(String args) {
+    	Matcher matcher = BLOCKED_TASK_DATA_ARGS_FORMAT.matcher(args.trim());
+    	if (!matcher.matches()) {
+            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddFloatingCommand.MESSAGE_USAGE));
+        }
+    	com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+        String startDate = matcher.group("startdate");
+        String endDate = matcher.group("enddate");
+        List<DateGroup> startDateGroup = nattyParser.parse(startDate);
+        List<DateGroup> endDateGroup = nattyParser.parse(endDate);
+        
+        try {
+            return new BlockCommand(
+                    new TaskDate(startDate,startDateGroup.get(0).getDates().get(0)),
+                    new TaskDate(endDate, endDateGroup.get(0).getDates().get(0)),
+                    getTagsFromArgs(matcher.group("tagArguments"))
+            );
+        }catch (IllegalValueException ive) {
+            return new IncorrectCommand(ive.getMessage());
+        }
+	}
     
 
     /**

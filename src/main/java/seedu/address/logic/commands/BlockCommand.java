@@ -11,36 +11,39 @@ import seedu.address.model.task.NonFloatingTask;
 import seedu.address.model.task.TaskDate;
 import seedu.address.model.task.UniqueTaskFloatingList;
 
-public class AddNonFloatingCommand extends AddCommand {
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a non floating task to the task list. "
-            + "Parameters: add TASK_NAME [start/DATE TIME] end/DATE TIME [tag/TAG]...\n"
+public class BlockCommand extends Command{
+	
+	public static final String COMMAND_WORD = "block";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Blocks a certain timeslot in the schedule. "
+            + "Parameters: block start/DATE TIME end/DATE TIME [tag/TAG]...\n"
             + "Example: " + COMMAND_WORD
-            + " Do homework from 24 sep 6pm to 29 sep 10am t/highPriority";
+            + " from 24 sep 6pm to 29 sep 10am t/highPriority";
 
-    public static final String MESSAGE_SUCCESS = "New non floating task added: %1$s";
-    public static final String MESSAGE_DUPLICATE_TASK = "This task already exists in the task list";
+    public static final String MESSAGE_SUCCESS = "Timeslot blocked: %1$s";
+    public static final String MESSAGE_TIMESLOT_OCCUPIED = "This timeslot is already blocked.";
     public static final String MESSAGE_ILLEGAL_TIME_SLOT = "End time must be later than Start time.";
+    private static final String DUMMY_NAME = "BLOCKED SLOT";
 
-    private final NonFloatingTask toAdd;
+    private final NonFloatingTask toBlock;
 
     /**
      * Convenience constructor using raw values.
      *
      * @throws IllegalValueException if any of the raw values are invalid
      */
-    public AddNonFloatingCommand(String name, TaskDate start, TaskDate end, Set<String> tags)
+    public BlockCommand(TaskDate start, TaskDate end, Set<String> tags)
             throws IllegalValueException {
         final Set<Tag> tagSet = new HashSet<>();
         for (String tagName : tags) {
             tagSet.add(new Tag(tagName));
         }
-        this.toAdd = new NonFloatingTask(
-                new Name(name),
+        this.toBlock = new NonFloatingTask(
+                new Name(DUMMY_NAME),
                 new TaskDate(start),
                 new TaskDate(end),
                 new UniqueTagList(tagSet)
         );
-        if(!this.toAdd.isValidTimeSlot())
+        if(!this.toBlock.isValidTimeSlot())
         	throw new IllegalValueException(MESSAGE_ILLEGAL_TIME_SLOT);
     }
 
@@ -48,10 +51,10 @@ public class AddNonFloatingCommand extends AddCommand {
     public CommandResult execute() {
         assert model != null;
         try {
-            model.addNonFloatingTask(toAdd);
-            return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
+            model.addNonFloatingTask(toBlock);
+            return new CommandResult(String.format(MESSAGE_SUCCESS, toBlock));
         } catch (UniqueTaskFloatingList.DuplicateTaskException e) {
-            return new CommandResult(MESSAGE_DUPLICATE_TASK);
+            return new CommandResult(MESSAGE_TIMESLOT_OCCUPIED);
         }
 
     }
