@@ -1,34 +1,65 @@
 package seedu.address.model.task;
 
+import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.tag.UniqueTagList;
 
+import java.util.Objects;
+
 /**
- * Represents a floating task in the task list.
+ * Represents a Task in the task list.
  * Guarantees: details are present and not null, field values are validated.
  */
-public class FloatingTask extends Task implements ReadOnlyFloatingTask {
-    
+public class FloatingTask implements ReadOnlyTask {
+
+    private Name name;
+    private UniqueTagList tags;
+
     /**
      * Every field must be present and not null.
      */
-    public FloatingTask(){}
-    
     public FloatingTask(Name name, UniqueTagList tags) {
-        super(name, tags);
+        assert !CollectionUtil.isAnyNull(name, tags);
+        this.name = name;
+        this.tags = tags;
     }
     
+    public FloatingTask(){}
+
     /**
      * Copy constructor.
      */
-    public FloatingTask(ReadOnlyFloatingTask source) {
+    public FloatingTask(ReadOnlyTask source) {
         this(source.getName(), source.getTags());
+    }
+
+    @Override
+    public Name getName() {
+        return name;
+    }
+
+    @Override
+    public UniqueTagList getTags() {
+        return new UniqueTagList(tags);
+    }
+
+    /**
+     * Replaces this task's tags with the tags in the argument tag list.
+     */
+    public void setTags(UniqueTagList replacement) {
+        tags.setTags(replacement);
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof ReadOnlyFloatingTask // instanceof handles nulls
-                && this.isSameStateAs((ReadOnlyFloatingTask) other));
+                || (other instanceof ReadOnlyTask // instanceof handles nulls
+                && this.isSameStateAs((ReadOnlyTask) other));
+    }
+
+    @Override
+    public int hashCode() {
+        // use this method for custom fields hashing instead of implementing your own
+        return Objects.hash(name, tags);
     }
 
     @Override
