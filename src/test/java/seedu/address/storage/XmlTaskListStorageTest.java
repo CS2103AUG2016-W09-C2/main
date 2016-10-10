@@ -71,7 +71,7 @@ public class XmlTaskListStorageTest {
         assertEquals(original, new TaskList(readBack));
 
         //Modify data, overwrite exiting file, and read back
-        original.addTask(new FloatingTask(TypicalTestFloatingTasks.hoon));
+        original.addFloatingTask(new FloatingTask(TypicalTestFloatingTasks.hoon));
         original.removeTask(new FloatingTask(TypicalTestFloatingTasks.trash));
         xmlTaskListStorage.saveTaskList(original, filePath);
         readBack = xmlTaskListStorage.readTaskList(filePath).get();

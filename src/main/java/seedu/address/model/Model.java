@@ -2,10 +2,15 @@ package seedu.address.model;
 
 import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.model.task.FloatingTask;
-import seedu.address.model.task.ReadOnlyTask;
+import seedu.address.model.task.NonFloatingTask;
+import seedu.address.model.task.ReadOnlyFloatingTask;
+import seedu.address.model.task.ReadOnlyNonFloatingTask;
 import seedu.address.model.task.UniqueTaskList;
+import seedu.address.model.task.UniqueTaskList.TimeslotOverlapException;
 
 import java.util.Set;
+
+import javafx.collections.ObservableList;
 
 /**
  * The API of the Model component.
@@ -18,21 +23,32 @@ public interface Model {
     ReadOnlyTaskList getTaskList();
 
     /** Deletes the given task. */
-    void deleteTask(ReadOnlyTask target) throws UniqueTaskList.TaskNotFoundException;
+    void deleteTask(ReadOnlyFloatingTask target) throws UniqueTaskList.TaskNotFoundException;
 
-    /** Adds the given task */
-    void addTask(FloatingTask task) throws UniqueTaskList.DuplicateTaskException;
-
+    /** Adds the given floating task */
+    void addFloatingTask(FloatingTask task) throws UniqueTaskList.DuplicateTaskException;
+    
+    /** Adds the given non floating task 
+     * @throws TimeslotOverlapException */
+    void addNonFloatingTask(NonFloatingTask task) throws UniqueTaskList.DuplicateTaskException, TimeslotOverlapException;
+    
     /** Returns the filtered task list as an {@code UnmodifiableObservableList<ReadOnlyTask>} */
-    UnmodifiableObservableList<ReadOnlyTask> getFilteredTaskList();
+    UnmodifiableObservableList<ReadOnlyFloatingTask> getFilteredFloatingTaskList();
 
-    /** Updates the filter of the filtered task list to show all tasks */
-    void updateFilteredListToShowAll();
+    UnmodifiableObservableList<ReadOnlyNonFloatingTask> getFilteredNonFloatingTaskList();
+    
+    /** Updates the filter of the filtered task list to show all floating tasks */
+    void updateFilteredFloatingListToShowAll();
+
+    /** Updates the filter of the filtered task list to show all non floating tasks */
+    void updateFilteredNonFloatingListToShowAll();
+    
+    /** Updates the filter of the filtered task list to filter by the given keywords*/
+    void updateFilteredFloatingTaskList(Set<String> keywords);
 
     /** Updates the filter of the filtered task list to filter by the given keywords*/
-    void updateFilteredTaskList(Set<String> keywords);
+    void updateFilteredNonFloatingTaskList(Set<String> keywords);    
     
     /** Updates the file path for current storage manager of the model.*/
 	void changeDirectory(String filePath);
-
 }

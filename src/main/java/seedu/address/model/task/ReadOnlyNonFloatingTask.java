@@ -1,13 +1,11 @@
 package seedu.address.model.task;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import seedu.address.model.tag.UniqueTagList;
 
-/**
- * A read-only immutable interface for a Task in the task list.
- * Implementations should guarantee: details are present and not null, field values are validated.
- */
-public interface ReadOnlyTask {
-
+public interface ReadOnlyNonFloatingTask {
     Name getName();
 
     /**
@@ -16,22 +14,30 @@ public interface ReadOnlyTask {
      */
     UniqueTagList getTags();
 
+    TaskDate getStartTaskDate();
+    TaskDate getEndTaskDate();
+    
     /**
      * Returns true if both have the same state. (interfaces cannot override .equals)
      */
-    default boolean isSameStateAs(ReadOnlyTask other) {
+    default boolean isSameStateAs(ReadOnlyNonFloatingTask other) {
         return other == this // short circuit if same object
                 || (other != null // this is first to avoid NPE below
                 && other.getName().equals(this.getName()) // state checks here onwards
+                && other.getStartTaskDate().equals(this.getStartTaskDate())
+                && other.getEndTaskDate().equals(this.getEndTaskDate())
                 );
     }
 
     /**
-     * Formats the task as text, showing all contact details.
+     * Formats the task as text, showing all non floating task details.
      */
     default String getAsText() {
         final StringBuilder builder = new StringBuilder();
+
         builder.append(getName())
+                .append(" Start Date: " + getStartTaskDate())
+                .append(" End Date: " + getEndTaskDate())
                 .append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();
