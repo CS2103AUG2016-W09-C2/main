@@ -5,10 +5,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import seedu.address.model.task.ReadOnlyTask;
+import seedu.address.model.task.TaskType;
 
 public class TaskCard extends UiPart{
 
-    private static final String FXML = "FloatingTaskListCard.fxml";
+    private static final String FXML = "TaskListCard.fxml";
 
     @FXML
     private HBox cardPane;
@@ -18,13 +19,15 @@ public class TaskCard extends UiPart{
     private Label id;
     @FXML
     private Label tags;
+    @FXML
+    private Label startDate;
+    @FXML
+    private Label endDate;
 
     private ReadOnlyTask task;
     private int displayedIndex;
 
-    public TaskCard(){
-
-    }
+    public TaskCard() {}
 
     public static TaskCard load(ReadOnlyTask task, int displayedIndex){
         TaskCard card = new TaskCard();
@@ -38,6 +41,20 @@ public class TaskCard extends UiPart{
         name.setText(task.getName().fullName);
         id.setText(displayedIndex + ". ");
         tags.setText(task.tagsString());
+        
+        if (task.getType() == TaskType.NON_FLOATING) {
+            if (task.getStartDate() == null) {
+                startDate.setText("");
+            } else {
+                startDate.setText(task.getStartDate().getFormattedDate());
+            }
+            endDate.setText(task.getEndDate().getFormattedDate());
+        }
+        
+        if (task.getType() == TaskType.FLOATING) {
+            startDate.setText("");
+            endDate.setText("");
+        }
     }
 
     public HBox getLayout() {

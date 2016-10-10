@@ -9,26 +9,37 @@ import java.util.Objects;
  * Represents a Task in the task list.
  * Guarantees: details are present and not null, field values are validated.
  */
-public class FloatingTask implements ReadOnlyTask {
+public class Task implements ReadOnlyTask {
 
     private Name name;
     private UniqueTagList tags;
-
+    
+    private TaskDate startDate, endDate;
+    private TaskType type;
+    
     /**
      * Every field must be present and not null.
      */
-    public FloatingTask(Name name, UniqueTagList tags) {
+    public Task(Name name, UniqueTagList tags) {
         assert !CollectionUtil.isAnyNull(name, tags);
         this.name = name;
         this.tags = tags;
+        type = TaskType.FLOATING;
     }
     
-    public FloatingTask(){}
+    public Task(Name name, UniqueTagList tags, TaskDate startDate, TaskDate endDate) {
+        this(name, tags);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        type = TaskType.NON_FLOATING;
+    }
+    
+    public Task(){}
 
     /**
      * Copy constructor.
      */
-    public FloatingTask(ReadOnlyTask source) {
+    public Task(ReadOnlyTask source) {
         this(source.getName(), source.getTags());
     }
 
@@ -41,7 +52,21 @@ public class FloatingTask implements ReadOnlyTask {
     public UniqueTagList getTags() {
         return new UniqueTagList(tags);
     }
+    
+    @Override
+    public TaskDate getStartDate() {
+        return startDate;
+    }
 
+    @Override
+    public TaskDate getEndDate() {
+        return endDate;
+    }
+
+    public TaskType getType() {
+        return type;
+    }
+    
     /**
      * Replaces this task's tags with the tags in the argument tag list.
      */
