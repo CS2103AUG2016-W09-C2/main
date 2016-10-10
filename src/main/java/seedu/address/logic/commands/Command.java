@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.events.ui.IncorrectCommandAttemptedEvent;
+import seedu.address.logic.URManager;
 import seedu.address.model.Model;
 
 /**
@@ -10,6 +11,7 @@ import seedu.address.model.Model;
  */
 public abstract class Command {
     protected Model model;
+    protected URManager urManager;
 
     /**
      * Constructs a feedback message to summarise an operation that displayed a listing of tasks.
@@ -35,6 +37,10 @@ public abstract class Command {
      */
     public void setData(Model model) {
         this.model = model;
+    }
+    
+    public void assignManager(URManager urManager) {
+    	this.urManager = urManager;
     }
 
     /**
