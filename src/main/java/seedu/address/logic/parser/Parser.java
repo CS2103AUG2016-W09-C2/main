@@ -224,7 +224,7 @@ public class Parser {
         return new FindCommand(keywordSet);
     }
     
-    private Date getDateFromString(String dateInput) {
+    public static Date getDateFromString(String dateInput) {
         final com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
         List<DateGroup> dateGroups = nattyParser.parse(dateInput);
         
