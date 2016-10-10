@@ -135,7 +135,7 @@ public class TestUtil {
     }
 
     public static TaskList generateEmptyTaskList() {
-        return new TaskList(new UniqueTaskFloatingList(), new UniqueTaskNonFloatingList(), new UniqueTagList());
+        return new TaskList(new UniqueTaskList(), new UniqueTagList());
     }
 
     public static XmlSerializableTaskList generateSampleStorageTaskList() {
@@ -326,7 +326,7 @@ public class TestUtil {
         return list;
     }
 
-    public static boolean compareCardAndTask(FloatingTaskCardHandle card, ReadOnlyFloatingTask task) {
+    public static boolean compareCardAndTask(FloatingTaskCardHandle card, ReadOnlyTask task) {
         return card.isSameTask(task);
     }
 

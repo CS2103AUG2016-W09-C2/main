@@ -3,10 +3,8 @@ package seedu.address.storage;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
-import seedu.address.model.task.ReadOnlyFloatingTask;
-import seedu.address.model.task.ReadOnlyNonFloatingTask;
-import seedu.address.model.task.UniqueTaskFloatingList;
-import seedu.address.model.task.UniqueTaskNonFloatingList;
+import seedu.address.model.task.ReadOnlyTask;
+import seedu.address.model.task.UniqueTaskList;
 import seedu.address.model.ReadOnlyTaskList;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,15 +20,12 @@ import java.util.stream.Collectors;
 public class XmlSerializableTaskList implements ReadOnlyTaskList {
 
     @XmlElement
-    private XmlSerializableFloatingTask floatingTask;
-    @XmlElement
-    private XmlSerializableNonFloatingTask nonFloatingTask;
+    private List<XmlAdaptedTask> tasks;
     @XmlElement
     private List<Tag> tags;
 
     {
-        floatingTask = new XmlSerializableFloatingTask();
-        nonFloatingTask = new XmlSerializableNonFloatingTask();
+        tasks = new ArrayList<>();
         tags = new ArrayList<>();
     }
 
@@ -43,8 +38,7 @@ public class XmlSerializableTaskList implements ReadOnlyTaskList {
      * Conversion
      */
     public XmlSerializableTaskList(ReadOnlyTaskList src) {
-        floatingTask.addAll(src);
-        nonFloatingTask.addAll(src);
+        tasks.addAll(src.getTaskList().stream().map(XmlAdaptedTask::new).collect(Collectors.toList()));
         tags = src.getTagList();
     }
 
@@ -59,25 +53,30 @@ public class XmlSerializableTaskList implements ReadOnlyTaskList {
     }
 
     @Override
-    public UniqueTaskFloatingList getUniqueFloatingTaskList() {
-        return floatingTask.getUniqueTaskList();
+    public UniqueTaskList getUniqueTaskList() {
+        UniqueTaskList lists = new UniqueTaskList();
+        for (XmlAdaptedTask p : tasks) {
+            try {
+                lists.add(p.toModelType());
+            } catch (IllegalValueException e) {
+
+            }
+        }
+        return lists;
     }
 
     @Override
-    public UniqueTaskNonFloatingList getUniqueNonFloatingTaskList() {
-        return nonFloatingTask.getUniqueTaskList();
-    }    
-    
-    @Override
-    public List<ReadOnlyFloatingTask> getFloatingTaskList() {
-        return floatingTask.getFloatingTaskList();
+    public List<ReadOnlyTask> getTaskList() {
+        return tasks.stream().map(p -> {
+            try {
+                return p.toModelType();
+            } catch (IllegalValueException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public List<ReadOnlyNonFloatingTask> getNonFloatingTaskList() {
-        return nonFloatingTask.getNonFloatingTaskList();
-    }    
-    
     @Override
     public List<Tag> getTagList() {
         return Collections.unmodifiableList(tags);

@@ -2,8 +2,7 @@ package seedu.address.logic;
 
 import javafx.collections.ObservableList;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.model.task.ReadOnlyFloatingTask;
-import seedu.address.model.task.ReadOnlyNonFloatingTask;
+import seedu.address.model.task.ReadOnlyTask;
 
 /**
  * API of the Logic component
@@ -17,7 +16,6 @@ public interface Logic {
     CommandResult execute(String commandText);
 
     /** Returns the filtered list of tasks. */
-    ObservableList<ReadOnlyFloatingTask> getFilteredFloatingTaskList();
-    ObservableList<ReadOnlyNonFloatingTask> getFilteredNonFloatingTaskList();
+    ObservableList<ReadOnlyTask> getFilteredTaskList();
 
 }

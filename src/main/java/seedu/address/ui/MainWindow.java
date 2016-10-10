@@ -13,7 +13,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.events.ui.ExitAppRequestEvent;
 import seedu.address.logic.Logic;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.task.ReadOnlyFloatingTask;
+import seedu.address.model.task.ReadOnlyTask;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -30,8 +30,7 @@ public class MainWindow extends UiPart {
 
     // Independent Ui parts residing in this Ui container
     private BrowserPanel browserPanel;
-    private FloatingTaskListPanel floatingTaskListPanel;
-    private NonFloatingTaskListPanel nonFloatingTaskListPanel;
+    private TaskListPanel taskListPanel;
     private ResultDisplay resultDisplay;
     private StatusBarFooter statusBarFooter;
     private CommandBox commandBox;
@@ -54,11 +53,8 @@ public class MainWindow extends UiPart {
     private MenuItem helpMenuItem;
 
     @FXML
-    private AnchorPane floatingTaskListPanelPlaceholder;
+    private AnchorPane taskListPanelPlaceholder;
 
-    @FXML
-    private AnchorPane nonFloatingTaskListPanelPlaceholder;
-    
     @FXML
     private AnchorPane resultDisplayPlaceholder;
 
@@ -113,8 +109,7 @@ public class MainWindow extends UiPart {
 
     void fillInnerParts() {
         browserPanel = BrowserPanel.load(browserPlaceholder);
-        floatingTaskListPanel = FloatingTaskListPanel.load(primaryStage, getFloatingTaskListPlaceholder(), logic.getFilteredFloatingTaskList());
-        nonFloatingTaskListPanel = NonFloatingTaskListPanel.load(primaryStage, getNonFloatingTaskListPlaceholder(), logic.getFilteredNonFloatingTaskList());
+        taskListPanel = TaskListPanel.load(primaryStage, getTaskListPlaceholder(), logic.getFilteredTaskList());
         resultDisplay = ResultDisplay.load(primaryStage, getResultDisplayPlaceholder());
         statusBarFooter = StatusBarFooter.load(primaryStage, getStatusbarPlaceholder(), config.getTaskListFilePath());
         commandBox = CommandBox.load(primaryStage, getCommandBoxPlaceholder(), resultDisplay, logic);
@@ -132,12 +127,8 @@ public class MainWindow extends UiPart {
         return resultDisplayPlaceholder;
     }
 
-    public AnchorPane getFloatingTaskListPlaceholder() {
-        return floatingTaskListPanelPlaceholder;
-    }
-    
-    public AnchorPane getNonFloatingTaskListPlaceholder() {
-        return nonFloatingTaskListPanelPlaceholder;
+    public AnchorPane getTaskListPlaceholder() {
+        return taskListPanelPlaceholder;
     }
 
     public void hide() {
@@ -191,11 +182,11 @@ public class MainWindow extends UiPart {
         raise(new ExitAppRequestEvent());
     }
 
-    public FloatingTaskListPanel getTaskListPanel() {
-        return this.floatingTaskListPanel;
+    public TaskListPanel getTaskListPanel() {
+        return this.taskListPanel;
     }
 
-    public void loadTaskPage(ReadOnlyFloatingTask task) {
+    public void loadTaskPage(ReadOnlyTask task) {
         browserPanel.loadTaskPage(task);
     }
 

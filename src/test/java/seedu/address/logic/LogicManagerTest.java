@@ -1,8 +1,6 @@
 package seedu.address.logic;
 
 import com.google.common.eventbus.Subscribe;
-import com.joestelmach.natty.DateGroup;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +23,6 @@ import seedu.address.storage.StorageManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -106,14 +103,14 @@ public class LogicManagerTest {
      */
     private void assertCommandBehavior(String inputCommand, String expectedMessage,
                                        ReadOnlyTaskList expectedTaskList,
-                                       List<? extends ReadOnlyFloatingTask> expectedShownList) throws Exception {
+                                       List<? extends ReadOnlyTask> expectedShownList) throws Exception {
 
         //Execute the command
         CommandResult result = logic.execute(inputCommand);
 
         //Confirm the ui display elements should contain the right data
         assertEquals(expectedMessage, result.feedbackToUser);
-        assertEquals(expectedShownList, model.getFilteredFloatingTaskList());
+        assertEquals(expectedShownList, model.getFilteredTaskList());
 
         //Confirm the state of data (saved and in-memory) is as expected
         assertEquals(expectedTaskList, model.getTaskList());
@@ -141,14 +138,14 @@ public class LogicManagerTest {
     @Test
     public void execute_clear() throws Exception {
         TestDataHelper helper = new TestDataHelper();
-        model.addFloatingTask(helper.generateTask(1));
-        model.addFloatingTask(helper.generateTask(2));
-        model.addFloatingTask(helper.generateTask(3));
+        model.addTask(helper.generateTask(1));
+        model.addTask(helper.generateTask(2));
+        model.addTask(helper.generateTask(3));
 
         assertCommandBehavior("clear", ClearCommand.MESSAGE_SUCCESS, new TaskList(), Collections.emptyList());
     }
 
-    /** Floating Task */
+
     @Test
     public void execute_add_invalidArgsFormat() throws Exception {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddFloatingCommand.MESSAGE_USAGE);
@@ -166,62 +163,48 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void execute_add_floating_successful() throws Exception {
+    public void execute_add_successful() throws Exception {
         // setup expectations
         TestDataHelper helper = new TestDataHelper();
-        FloatingTask toBeAdded = helper.floatingTask();
+        FloatingTask toBeAdded = helper.adam();
         TaskList expectedAB = new TaskList();
-        expectedAB.addFloatingTask(toBeAdded);
+        expectedAB.addTask(toBeAdded);
 
         // execute command and verify result
-        assertCommandBehavior(helper.generateAddFloatingCommand(toBeAdded),
+        assertCommandBehavior(helper.generateAddCommand(toBeAdded),
                 String.format(AddFloatingCommand.MESSAGE_SUCCESS, toBeAdded),
                 expectedAB,
-                expectedAB.getFloatingTaskList());
+                expectedAB.getTaskList());
+
     }
 
     @Test
-    public void execute_addDuplicate_floating_notAllowed() throws Exception {
+    public void execute_addDuplicate_notAllowed() throws Exception {
         // setup expectations
         TestDataHelper helper = new TestDataHelper();
-        FloatingTask toBeAdded = helper.floatingTask();
+        FloatingTask toBeAdded = helper.adam();
         TaskList expectedAB = new TaskList();
-        expectedAB.addFloatingTask(toBeAdded);
+        expectedAB.addTask(toBeAdded);
 
         // setup starting state
-        model.addFloatingTask(toBeAdded); // task already in internal task list
+        model.addTask(toBeAdded); // task already in internal task list
 
         // execute command and verify result
         assertCommandBehavior(
-                helper.generateAddFloatingCommand(toBeAdded),
+                helper.generateAddCommand(toBeAdded),
                 AddFloatingCommand.MESSAGE_DUPLICATE_TASK,
                 expectedAB,
-                expectedAB.getFloatingTaskList());
+                expectedAB.getTaskList());
 
     }
 
-    /** Non Floating Task */
-    @Test
-    public void execute_add_non_floating_successful() throws Exception {
-        // setup expectations
-        TestDataHelper helper = new TestDataHelper();
-        NonFloatingTask toBeAdded = helper.nonFloatingTask();
-        TaskList expectedAB = new TaskList();
-        expectedAB.addNonFloatingTask(toBeAdded);
-
-        // execute command and verify result
-        assertCommandBehavior(helper.generateAddNonFloatingCommand(toBeAdded),
-                String.format(AddNonFloatingCommand.MESSAGE_SUCCESS, toBeAdded),
-                expectedAB,
-                expectedAB.getFloatingTaskList());    
-    }
 
     @Test
     public void execute_list_showsAllTasks() throws Exception {
         // prepare expectations
         TestDataHelper helper = new TestDataHelper();
         TaskList expectedAB = helper.generateTaskList(2);
-        List<? extends ReadOnlyFloatingTask> expectedList = expectedAB.getFloatingTaskList();
+        List<? extends ReadOnlyTask> expectedList = expectedAB.getTaskList();
 
         // prepare task list state
         helper.addToModel(model, 2);
@@ -259,7 +242,7 @@ public class LogicManagerTest {
         // set AB state to 2 tasks
         model.resetData(new TaskList());
         for (FloatingTask p : taskList) {
-            model.addFloatingTask(p);
+            model.addTask(p);
         }
 
         assertCommandBehavior(commandWord + " 3", expectedMessage, model.getTaskList(), taskList);
@@ -287,9 +270,9 @@ public class LogicManagerTest {
         assertCommandBehavior("select 2",
                 String.format(SelectCommand.MESSAGE_SELECT_TASK_SUCCESS, 2),
                 expectedAB,
-                expectedAB.getFloatingTaskList());
+                expectedAB.getTaskList());
         assertEquals(1, targetedJumpIndex);
-        assertEquals(model.getFilteredFloatingTaskList().get(1), threeTasks.get(1));
+        assertEquals(model.getFilteredTaskList().get(1), threeTasks.get(1));
     }
 
 
@@ -316,7 +299,7 @@ public class LogicManagerTest {
         assertCommandBehavior("delete 2",
                 String.format(DeleteCommand.MESSAGE_DELETE_TASK_SUCCESS, threeTasks.get(1)),
                 expectedAB,
-                expectedAB.getFloatingTaskList());
+                expectedAB.getTaskList());
     }
 
 
@@ -389,30 +372,12 @@ public class LogicManagerTest {
      */
     class TestDataHelper{
 
-        FloatingTask floatingTask() throws Exception {
-            Name name = new Name("Add floating task");
+        FloatingTask adam() throws Exception {
+            Name name = new Name("go shopping with Adam Brown");
             Tag tag1 = new Tag("tag1");
             Tag tag2 = new Tag("tag2");
             UniqueTagList tags = new UniqueTagList(tag1, tag2);
             return new FloatingTask(name, tags);
-        }
-        
-        NonFloatingTask nonFloatingTask() throws Exception {
-            Name name = new Name("Add non floating task");
-            com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
-            final String rawStartDate = "19 jun 6pm";
-            final String rawEndDate = "20 sep 10am";
-            List<DateGroup> startDateGroup = nattyParser.parse(rawStartDate);
-            List<DateGroup> endDateGroup = nattyParser.parse(rawEndDate);
-            TaskDate startDate = new TaskDate(rawStartDate, startDateGroup.get(0).getDates().get(0));
-            TaskDate endDate = new TaskDate(rawEndDate, endDateGroup.get(0).getDates().get(0));
-            Tag tag1 = new Tag("tag1");
-            Tag tag2 = new Tag("tag2");
-            UniqueTagList tags = new UniqueTagList(tag1, tag2);
-            return new NonFloatingTask(name, 
-                    startDate,
-                    endDate,
-                    tags);
         }
 
         /**
@@ -429,8 +394,8 @@ public class LogicManagerTest {
             );
         }
 
-        /** Generates the correct add command based on the floating task given */
-        String generateAddFloatingCommand(FloatingTask p) {
+        /** Generates the correct add command based on the task given */
+        String generateAddCommand(FloatingTask p) {
             StringBuffer cmd = new StringBuffer();
 
             cmd.append("add ");
@@ -445,24 +410,6 @@ public class LogicManagerTest {
             return cmd.toString();
         }
 
-        /** Generates the correct add command based on non floating the task given */
-        String generateAddNonFloatingCommand(NonFloatingTask p) {
-            StringBuffer cmd = new StringBuffer();
-
-            cmd.append("add ");
-
-            cmd.append(p.getName().toString());
-            cmd.append(" from ").append(p.getStartTaskDate().getRawDateInput());
-            cmd.append(" to ").append(p.getEndTaskDate().getRawDateInput());
-
-            UniqueTagList tags = p.getTags();
-            for(Tag t: tags){
-                cmd.append(" t/").append(t.tagName);
-            }
-
-            return cmd.toString();
-        }        
-        
         /**
          * Generates an TaskList with auto-generated tasks.
          */
@@ -494,7 +441,7 @@ public class LogicManagerTest {
          */
         void addToTaskList(TaskList taskList, List<FloatingTask> tasksToAdd) throws Exception{
             for(FloatingTask p: tasksToAdd){
-                taskList.addFloatingTask(p);
+                taskList.addTask(p);
             }
         }
 
@@ -511,7 +458,7 @@ public class LogicManagerTest {
          */
         void addToModel(Model model, List<FloatingTask> tasksToAdd) throws Exception{
             for(FloatingTask p: tasksToAdd){
-                model.addFloatingTask(p);
+                model.addTask(p);
             }
         }
 

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * JAXB-friendly version of the Task.
  */
-public class XmlAdaptedFloatingTask {
+public class XmlAdaptedTask {
 
     @XmlElement(required = true)
     private String name;
@@ -23,7 +23,7 @@ public class XmlAdaptedFloatingTask {
     /**
      * No-arg constructor for JAXB use.
      */
-    public XmlAdaptedFloatingTask() {}
+    public XmlAdaptedTask() {}
 
 
     /**
@@ -31,7 +31,7 @@ public class XmlAdaptedFloatingTask {
      *
      * @param source future changes to this will not affect the created XmlAdaptedTask
      */
-    public XmlAdaptedFloatingTask(ReadOnlyFloatingTask source) {
+    public XmlAdaptedTask(ReadOnlyTask source) {
         name = source.getName().fullName;
         tagged = new ArrayList<>();
         for (Tag tag : source.getTags()) {
