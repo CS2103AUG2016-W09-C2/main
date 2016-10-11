@@ -23,6 +23,8 @@ public class TaskDate {
     }
     
     public String getFormattedDate() {
+        if (date == null)
+            return "";
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d hh.mma");
         return formatter.format(date);
     }
@@ -33,6 +35,8 @@ public class TaskDate {
     }
 
     public long getDate() {
+        if (date == null)
+            return -1;
         return date.getTime();
     }   
 }

@@ -57,6 +57,9 @@ public class Task implements ReadOnlyTask {
     
     @Override
     public TaskDate getStartDate() {
+        if (startDate == null) {
+            return null;
+        }
         return startDate;
     }
 
