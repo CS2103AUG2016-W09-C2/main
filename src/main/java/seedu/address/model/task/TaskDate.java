@@ -4,39 +4,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TaskDate {
-    private Date date;
-    private String rawInputDate;
+    public static final int DATE_NOT_PRESENT = -1;
+    private long date;
     
-    public TaskDate(String inputDate, Date date) {
-        this.rawInputDate = inputDate;
+    public TaskDate(long date) {
         this.date = date;
     }
-    
-    public TaskDate(Date date) {
-        this.date = date;
-        this.rawInputDate = getRawCommandInput();
-    }
-    
+        
     public TaskDate(TaskDate copy) {
         this.date = copy.date;
-        this.rawInputDate = copy.rawInputDate;
     }
     
     public String getFormattedDate() {
-        if (date == null)
+        if (date == DATE_NOT_PRESENT) {
             return "";
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d hh.mma");
-        return formatter.format(date);
-    }
-
-    public String getRawCommandInput() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM hh.mma");
-        return formatter.format(date);
+        return formatter.format(new Date(date));
     }
 
     public long getDate() {
-        if (date == null)
-            return -1;
-        return date.getTime();
+        if (date == DATE_NOT_PRESENT) {
+            return DATE_NOT_PRESENT;
+        }
+        return date;
     }   
 }
