@@ -19,6 +19,7 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
 import seedu.address.model.UserPrefs;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -107,7 +108,7 @@ public class UiManager extends ComponentManager implements Ui {
     }
 
     @Subscribe
-    private void handleShowHelpEvent(ShowHelpRequestEvent event) {
+    private void handleShowHelpEvent(ShowHelpRequestEvent event) throws IOException {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         mainWindow.handleHelp();
     }
