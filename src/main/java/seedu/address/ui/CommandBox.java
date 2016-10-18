@@ -126,24 +126,9 @@ public class CommandBox extends UiPart {
         commandTextField.getStyleClass().add("error");
     }
     
-    private HashSet<String> setDictionary(){
-    	HashSet<String> dictionary = new HashSet<String>();  	
-		//syntax words
-		dictionary.add("from");
-		dictionary.add("to");
-		dictionary.add("by");
-		dictionary.add("t/");
-		dictionary.add("am");
-		dictionary.add("pm");
-		//command word
-		String[] commandWords = {"add", "block","cd","delete","done","help","u","r","find","list","select","exit"};
-		for(String s: commandWords) dictionary.add(s);
-		//date
-		String[] dateWords = {"jan","feb","mar","apr","may","jun","jul",
-							  "aug","sep","oct","nov","dec","today","tomorrow",
-							  "mon","tue","wed","thur","fri","sat","sun"};
-		for(String s: dateWords) dictionary.add(s);
-		return dictionary;
-	}
+    
+    public void turnnOffAutoComplete(){
+    	commandTextField.onTest = true;
+    }
 
 }
