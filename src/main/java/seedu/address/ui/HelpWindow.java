@@ -3,7 +3,6 @@ package seedu.address.ui;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Path;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import seedu.address.commons.util.FxViewUtil;
@@ -12,10 +11,7 @@ import seedu.address.commons.core.LogsCenter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.logging.Logger;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * Controller for a help page
@@ -26,8 +22,7 @@ public class HelpWindow extends UiPart {
     private static final String ICON = "/images/help_icon.png";
     private static final String FXML = "HelpWindow.fxml";
     private static final String TITLE = "Help";
-    private static final String HELP =
-            "help.html";
+    private static final String HELP = "help.html";
     
 
     private AnchorPane mainPane;
@@ -59,7 +54,7 @@ public class HelpWindow extends UiPart {
         setIcon(dialogStage, ICON);
         
         ClassLoader classloader = getClass().getClassLoader();
-        File file = new File(classloader.getResource("help.html").getFile());
+        File file = new File(classloader.getResource(HELP).getFile());
         String content = new String(Files.readAllBytes(file.toPath()));
         WebView browser = new WebView();
         browser.getEngine().loadContent(content);
