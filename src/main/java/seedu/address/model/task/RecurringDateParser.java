@@ -1,8 +1,6 @@
-package seedu.address.logic.parser;
+package seedu.address.model.task;
 
 import java.util.HashSet;
-
-import seedu.address.model.task.RecurringType;
 
 /**
  * Parses the recurring info to determine the recurring type of the input

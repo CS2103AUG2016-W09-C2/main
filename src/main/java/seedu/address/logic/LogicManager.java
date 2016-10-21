@@ -36,6 +36,7 @@ public class LogicManager extends ComponentManager implements Logic {
         command.setData(model);
         urManager.addToUndoQueue(model, command);
         command.assignManager(urManager);
+        RecurringTaskManager.getInstance().update();
         return command.execute();
     }
 

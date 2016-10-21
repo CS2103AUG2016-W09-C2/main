@@ -3,9 +3,7 @@ package seedu.address.logic.commands;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.task.Name;
@@ -39,7 +37,6 @@ public class AddNonFloatingCommand extends AddCommand {
      */
     public AddNonFloatingCommand(String name, Set<String> tags, TaskDate startDate, TaskDate endDate, RecurringType recurringType)
             throws IllegalValueException {
-        assert !CollectionUtil.isAnyNull(name, tags, startDate, endDate, recurringType);
         final Set<Tag> tagSet = new HashSet<>();
         for (String tagName : tags) {
             tagSet.add(new Tag(tagName));
