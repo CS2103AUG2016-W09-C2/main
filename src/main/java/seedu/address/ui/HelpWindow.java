@@ -53,7 +53,7 @@ public class HelpWindow extends UiPart {
         setIcon(dialogStage, ICON);
 
         ClassLoader classloader = getClass().getClassLoader();
-        File file = new File(classloader.getResource(HELP).getFile());
+        File file = new File(classloader.getResource("help.html").getFile());
         WebView browser = new WebView();
         browser.getEngine().load(file.toURI().toURL().toString());
         FxViewUtil.applyAnchorBoundaryParameters(browser, 0.0, 0.0, 0.0, 0.0);
