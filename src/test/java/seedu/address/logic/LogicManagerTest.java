@@ -113,7 +113,7 @@ public class LogicManagerTest {
         logic = new LogicManager(model, new StorageManager(tempTaskListFile, tempPreferencesFile));
         EventsCenter.getInstance().registerHandler(this);
 
-        latestSavedTaskList = new TaskMaster(model.getTaskMaster()); 
+        latestSavedTaskList = new TaskMaster(model.getTaskMaster());
         helpShown = false;
         targetedJumpIndex = -1; // non yet
     }
@@ -228,13 +228,20 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void execute_nonFloatingUnrecognizableDate_notAllowed() throws Exception {
+    public void execute_addNonFloatingUnrecognizableDate_notAllowed() throws Exception {
         String expectedMessage = Messages.MESSAGE_ILLEGAL_DATE_INPUT;
         assertCommandBehavior("add task from not a date to not a date", expectedMessage);
         assertCommandBehavior("add task by not a date", expectedMessage);
     }
 
     // @@author A0147967J
+    @Test
+    public void execute_addNonFloatingIllegalName_notAllowed() throws Exception {
+        String expectedMessage = Name.MESSAGE_NAME_CONSTRAINTS;
+        assertCommandBehavior("add ^$%^%^$% from 2am to 3am", expectedMessage);
+        assertCommandBehavior("add %%$%^% by 2am", expectedMessage);
+    }
+
     @Test
     public void execute_addNonFloating_sucessful() throws Exception {
         // setup expectations
@@ -595,9 +602,15 @@ public class LogicManagerTest {
     private void assertIncorrectIndexFormatBehaviorForCommand(String commandWord, String expectedMessage)
             throws Exception {
         assertCommandBehavior(commandWord, expectedMessage); // index missing
-        assertCommandBehavior(commandWord + " +1", expectedMessage); // index should be unsigned index
-        assertCommandBehavior(commandWord + " -1", expectedMessage); 
-        assertCommandBehavior(commandWord + " 0", expectedMessage); // index cannot be 0
+        assertCommandBehavior(commandWord + " +1", expectedMessage); // index
+                                                                     // should
+                                                                     // be
+                                                                     // unsigned
+                                                                     // index
+        assertCommandBehavior(commandWord + " -1", expectedMessage);
+        assertCommandBehavior(commandWord + " 0", expectedMessage); // index
+                                                                    // cannot be
+                                                                    // 0
         assertCommandBehavior(commandWord + " not_a_number", expectedMessage);
     }
 
