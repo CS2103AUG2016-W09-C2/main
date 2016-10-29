@@ -84,28 +84,38 @@ public class UniqueTaskList implements Iterable<Task> {
         // ignore floating and deadline tasks
         if (toCheck.getComponentForNonRecurringType().getStartDate().getDateInLong() == TaskDate.DATE_NOT_PRESENT)
             return false;
+
         // Only compare tasks with blocked time slots.
-        for (Task t : internalList) {
-            if (t.getName().fullName.equals(BlockCommand.DUMMY_NAME)) {
-                if (withinSlot(toCheck, t))
-                    return true;
-            }
-        }
         // Or if it is block command, check with existing tasks
-        if (toCheck.getName().fullName.equals(BlockCommand.DUMMY_NAME)) {
-            for (Task t : internalList) {
-                if (t.getTaskType() == TaskType.NON_FLOATING && !t.getLastAppendedComponent().hasOnlyEndDate()) {
-                    if (withinSlot(toCheck, t))
-                        return true;
-                }
-            }
-        }
-        return false;
+        return isOverlappingWithBlock(toCheck) || isBlockOverlappingWithTask(toCheck);
 
     }
 
+    public boolean isBlockOverlappingWithTask(ReadOnlyTask toCheck) {
+        if (!toCheck.getName().fullName.equals(BlockCommand.DUMMY_NAME)) {
+            return false;
+        }
+        for (Task t : internalList) {
+            if (t.getTaskType() == TaskType.NON_FLOATING && !t.getLastAppendedComponent().hasOnlyEndDate()
+                    && isWithinSlot(toCheck, t)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isOverlappingWithBlock(ReadOnlyTask toCheck) {
+        for (Task t : internalList) {
+            if (t.getName().fullName.equals(BlockCommand.DUMMY_NAME) && isWithinSlot(toCheck, t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Returns true if the toCheck slot overlaps with the given one. */
-    public boolean withinSlot(ReadOnlyTask toCheck, ReadOnlyTask given) {
+    public boolean isWithinSlot(ReadOnlyTask toCheck, ReadOnlyTask given) {
         return !(!given.getComponentForNonRecurringType().getEndDate().getDate()
                 .after(toCheck.getComponentForNonRecurringType().getStartDate().getDate())
                 || !given.getComponentForNonRecurringType().getStartDate().getDate()

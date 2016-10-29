@@ -113,12 +113,7 @@ public class LogicManagerTest {
         logic = new LogicManager(model, new StorageManager(tempTaskListFile, tempPreferencesFile));
         EventsCenter.getInstance().registerHandler(this);
 
-        latestSavedTaskList = new TaskMaster(model.getTaskMaster()); // last
-                                                                     // saved
-                                                                     // assumed
-                                                                     // to be up
-                                                                     // to date
-                                                                     // before.
+        latestSavedTaskList = new TaskMaster(model.getTaskMaster()); 
         helpShown = false;
         targetedJumpIndex = -1; // non yet
     }
@@ -507,8 +502,9 @@ public class LogicManagerTest {
             Task t = helper.generateTask(i);
             logic.execute(helper.generateAddCommand(t));
         }
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
             logic.execute("u");
+        }
 
         expectedAB.addTask(helper.generateTask(1));
         assertCommandBehavior("u", UndoCommand.MESSAGE_FAIL, expectedAB, expectedAB.getTaskComponentList());
@@ -599,17 +595,9 @@ public class LogicManagerTest {
     private void assertIncorrectIndexFormatBehaviorForCommand(String commandWord, String expectedMessage)
             throws Exception {
         assertCommandBehavior(commandWord, expectedMessage); // index missing
-        assertCommandBehavior(commandWord + " +1", expectedMessage); // index
-                                                                     // should
-                                                                     // be
-                                                                     // unsigned
-        assertCommandBehavior(commandWord + " -1", expectedMessage); // index
-                                                                     // should
-                                                                     // be
-                                                                     // unsigned
-        assertCommandBehavior(commandWord + " 0", expectedMessage); // index
-                                                                    // cannot be
-                                                                    // 0
+        assertCommandBehavior(commandWord + " +1", expectedMessage); // index should be unsigned index
+        assertCommandBehavior(commandWord + " -1", expectedMessage); 
+        assertCommandBehavior(commandWord + " 0", expectedMessage); // index cannot be 0
         assertCommandBehavior(commandWord + " not_a_number", expectedMessage);
     }
 

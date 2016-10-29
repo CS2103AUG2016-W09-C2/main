@@ -30,15 +30,16 @@ public class URManager {
      */
     public void addToUndoQueue(Model model, Command command) {
         if (!isUndoable(command)) {
-            // Stop here to wait for result.
-        } else {
-            if (!isIgnored(command)) {
-                if (undoQueue.size() == MAX_TIMES)
-                    undoQueue.removeFirst();
-                undoQueue.addLast(new Context(model, command));
-                redoQueue.clear();
-            }
+            return;// Stop here to wait for result.
         }
+        if (isIgnored(command)) {
+            return;
+        }
+        if (undoQueue.size() == MAX_TIMES) {
+            undoQueue.removeFirst();
+        }
+        undoQueue.addLast(new Context(model, command));
+        redoQueue.clear();       
     }
 
     /**
@@ -64,13 +65,16 @@ public class URManager {
         if (!isUndoable(command)) {
             undoQueue.clear();
             redoQueue.clear();
-        } else {
-            if (!isIgnored(command)) {
-                if (undoQueue.size() == MAX_TIMES)
-                    undoQueue.removeFirst();
-                undoQueue.addLast(new Context(model, command));
-            }
+            return;
+        } 
+        if (isIgnored(command)) {
+            return;
         }
+        if (undoQueue.size() == MAX_TIMES) {
+            undoQueue.removeFirst();
+        }
+        undoQueue.addLast(new Context(model, command));
+        
     }
 
     public Context getContextToUndo() throws NoAvailableCommandException {
