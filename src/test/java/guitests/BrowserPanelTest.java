@@ -68,6 +68,11 @@ public class BrowserPanelTest extends TaskMasterGuiTest {
         expectedList.add(toBeAdded.getLastAppendedComponent());
         commandBox.runCommand(toBeAdded.getBlockCommand());
         assertIsAgendaMatching(expectedList);
+        
+        //View a random day before today, nothing should be listed
+        expectedList.clear();
+        commandBox.runCommand("view last year today");
+        assertIsAgendaMatching(expectedList);
 
     }
 

@@ -74,6 +74,13 @@ public class EditCommandTest extends TaskMasterGuiTest {
         toBeEdited.setRecurringType(RecurringType.NONE);
         currentList[index - 1] = toBeEdited;
         assertEditSuccess(toBeEdited, "edit 4 none", currentList);
+        
+        //Edit name and recurring type at the same time can be reflected correctly
+        toBeEdited = currentList[index - 1];
+        toBeEdited.setRecurringType(RecurringType.DAILY);
+        toBeEdited.setName(new Name("Test name 2"));
+        currentList[index - 1] = toBeEdited;
+        assertEditSuccess(toBeEdited, "edit 4 Test name 2 daily", currentList);
 
     }
 
