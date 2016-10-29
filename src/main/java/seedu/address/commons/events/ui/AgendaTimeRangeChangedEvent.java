@@ -12,11 +12,10 @@ import seedu.address.model.task.TaskDate;
  */
 public class AgendaTimeRangeChangedEvent extends BaseEvent {
 
-
     private final TaskDate inputDate;
     private final List<TaskComponent> taskComponentList;
 
-    public AgendaTimeRangeChangedEvent(TaskDate inputDate, List<TaskComponent> list){
+    public AgendaTimeRangeChangedEvent(TaskDate inputDate, List<TaskComponent> list) {
         this.inputDate = inputDate;
         this.taskComponentList = list;
     }
@@ -29,7 +28,7 @@ public class AgendaTimeRangeChangedEvent extends BaseEvent {
     public TaskDate getInputDate() {
         return inputDate;
     }
-    
+
     public List<TaskComponent> getData() {
         return taskComponentList;
     }
