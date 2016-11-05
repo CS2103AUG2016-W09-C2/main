@@ -78,7 +78,7 @@ public class TestTask extends Task implements ReadOnlyTask {
 
     @Override
     public UniqueTagList getTags() {
-        return new UniqueTagList(tags);
+        return tags;
     }
     
     @Override
@@ -109,6 +109,10 @@ public class TestTask extends Task implements ReadOnlyTask {
     @Override
     public TaskType getTaskType(){
     	return type;
+    }
+    @Override
+    public boolean isBlockedSlot(){
+        return this.name!= null && this.name.fullName.equals(Name.DUMMY_NAME);
     }
     
     @Override

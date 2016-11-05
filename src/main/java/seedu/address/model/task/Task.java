@@ -127,7 +127,7 @@ public class Task implements ReadOnlyTask {
      */
     @Override
     public boolean isBlockedSlot(){
-        return this.name.fullName.equals(Name.DUMMY_NAME);
+        return this.name!=null && this.name.fullName.equals(Name.DUMMY_NAME);
     }
     // @@author
     /**
