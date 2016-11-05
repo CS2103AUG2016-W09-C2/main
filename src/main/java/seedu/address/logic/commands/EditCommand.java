@@ -14,7 +14,6 @@ import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.task.Name;
 import seedu.address.model.task.RecurringType;
-import seedu.address.model.task.Task;
 import seedu.address.model.task.TaskOccurrence;
 import seedu.address.model.task.TaskDate;
 import seedu.address.model.task.UniqueTaskList.TaskNotFoundException;
@@ -28,7 +27,7 @@ public class EditCommand extends Command {
             + "Parameters: TASK_INDEX [NEW_TASK_NAME]" + "[from DATE to DATE | by DEADLINE]" + "[t/TAGS]\n"
             + "Example: " + COMMAND_WORD + " 1 a task by today 9pm";
 
-    public static final String MESSAGE_EDIT_TASK_SUCCESS = "Edit Task: %1$s";
+    public static final String MESSAGE_EDIT_TASK_SUCCESS = "Edited Task: %1$s";
     public static final String MESSAGE_TIMESLOT_OCCUPIED = "This timeslot is already blocked or overlapped with existing tasks.";
     public static final String MESSAGE_ILLEGAL_TIME_SLOT = "End time must be later than Start time.";
 
@@ -88,10 +87,9 @@ public class EditCommand extends Command {
         }
 
         TaskOccurrence taskToEdit = lastShownList.get(targetIndex - 1);
-        //Task targetTask = (Task) taskToEdit.getTaskReference();
         try {
             model.editTask(taskToEdit, taskName, tags, startDate, endDate, recurringType);
-            CommandResult result = new CommandResult(String.format(MESSAGE_EDIT_TASK_SUCCESS, taskToEdit.getTaskReference()));
+            CommandResult result = new CommandResult(String.format(MESSAGE_EDIT_TASK_SUCCESS, taskToEdit.toString()));
             EventsCenter.getInstance().post(new JumpToListRequestEvent(targetIndex - 1));
             return result;
         } catch (TaskNotFoundException e) {

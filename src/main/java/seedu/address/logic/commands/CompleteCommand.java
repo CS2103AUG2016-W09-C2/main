@@ -15,7 +15,7 @@ public class CompleteCommand extends Command {
     public static final String COMMAND_WORD = "done";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Archives the task identified by the index number used in the last task listing. The Task will be deleted after exiting the app.\n"
+            + ": Archives the task identified by the index number used in the last task listing.\n"
             + "Parameters: INDEX (must be a positive integer)\n" + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_COMPLETE_TASK_SUCCESS = "Completed Task: %1$s";
@@ -37,14 +37,14 @@ public class CompleteCommand extends Command {
             return new CommandResult(Messages.MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
         }
 
-        TaskOccurrence taskToDelete = lastShownList.get(targetIndex - 1);
+        TaskOccurrence taskToArchive = lastShownList.get(targetIndex - 1);
 
         try {
-            model.archiveTask(taskToDelete);
+            model.archiveTask(taskToArchive);
         } catch (TaskNotFoundException pnfe) {
             assert false : "The target task cannot be missing";
         }
 
-        return new CommandResult(String.format(MESSAGE_COMPLETE_TASK_SUCCESS, taskToDelete.getTaskReference()));
+        return new CommandResult(String.format(MESSAGE_COMPLETE_TASK_SUCCESS, taskToArchive.toString()));
     }
 }

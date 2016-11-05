@@ -37,7 +37,6 @@ public class NavbarCard extends UiPart {
 
     @Override
     public void setNode(Node node) {
-        // cardPaneNav = (HBox)node;
     }
 
     @Override

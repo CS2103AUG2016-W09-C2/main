@@ -5,7 +5,7 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.events.ui.JumpToListRequestEvent;
 import seedu.address.model.task.TaskOccurrence;
 import seedu.address.commons.core.UnmodifiableObservableList;
-
+//@@author A0147967J-reused
 /**
  * Selects a task identified using it's last displayed index from the task list.
  */
@@ -16,11 +16,11 @@ public class SelectCommand extends Command {
     public static final String COMMAND_WORD = "select";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Selects the task identified by the index number used in the last task listing.\n"
+            + ": Selects the task occurrence identified by the index number used in the last task listing and shows its infromation.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_SELECT_TASK_SUCCESS = "Selected Task: %1$s";
+    public static final String MESSAGE_SELECT_TASK_SUCCESS = "Selected Task Details: %1$s";
 
     public SelectCommand(int targetIndex) {
         this.targetIndex = targetIndex;
@@ -29,7 +29,6 @@ public class SelectCommand extends Command {
     @Override
     public CommandResult execute() {
     	
-    	//assert false : "Select does not support recurring tasks"; // Should use TaskComponent instead of task
         UnmodifiableObservableList<TaskOccurrence> lastShownList = model.getFilteredTaskComponentList();
         
         if (lastShownList.size() < targetIndex) {
@@ -39,7 +38,7 @@ public class SelectCommand extends Command {
         }
 
         EventsCenter.getInstance().post(new JumpToListRequestEvent(targetIndex - 1));
-        return new CommandResult(String.format(MESSAGE_SELECT_TASK_SUCCESS, targetIndex));
+        return new CommandResult(String.format(MESSAGE_SELECT_TASK_SUCCESS, lastShownList.get(targetIndex-1).toString()));
 
     }
 

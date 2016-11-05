@@ -49,34 +49,31 @@ public class TaskOccurrence {
         return endDate;
     }
     
+    //@@author A0147967J
     /**
-     * Checks if TaskDateComponent is in a valid time slot
+     * Checks if TaskDateComponent is in a valid non-floating time.
      * 
      * @return True if it is in a valid time slot
      */
-    public boolean isValidTimeSlot(){
-        if(startDate!=null && endDate!=null){
-            return (endDate.getDate()).after(startDate.getDate());
-        }else{
-            return true;
-        }
-    }
-    
-    public boolean isSlot(){
-        return startDate.getDateInLong() != TaskDate.DATE_NOT_PRESENT 
-                && endDate.getDateInLong() != TaskDate.DATE_NOT_PRESENT;
-    }
-    
-    /**
-     * Returns True if it has only end date.
-     */
-    public boolean hasOnlyEndDate() {
-        if (startDate.getDateInLong() != TaskDate.DATE_NOT_PRESENT){
-            return false;
+    public boolean isValidNonFloatingTime(){
+        if(isTimeSlot()){
+            return endDate.getDate().after(startDate.getDate());
         }
         return true;
     }
     
+    public boolean isTimeSlot(){
+        return startDate.isValid() && endDate.isValid();
+    }
+    
+    public boolean isFloating(){
+        return !startDate.isValid() && !endDate.isValid();
+    }
+    
+    public boolean isDeadline(){
+        return !startDate.isValid() && endDate.isValid();
+    }
+    //@@author
 
     public ReadOnlyTask getTaskReference() {
         return taskReference;
@@ -117,6 +114,19 @@ public class TaskOccurrence {
         return other == this // short circuit if same object
                 || (other instanceof TaskOccurrence // instanceof handles nulls
                 && this.isSameStateAs((TaskOccurrence) other));        
+    }
+    
+    @Override
+    public String toString(){
+        final StringBuilder builder = new StringBuilder();
+        builder.append(this.taskReference.toString());
+        if(isDeadline()){
+            builder.append("\nBy: " + endDate.getFormattedDate());
+        }else if(isTimeSlot()){
+            builder.append("\nFrom: " + startDate.getFormattedDate());
+            builder.append(" To: " + endDate.getFormattedDate());
+        }
+        return builder.toString();
     }
     
 }

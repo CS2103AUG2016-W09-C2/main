@@ -85,7 +85,7 @@ public class RecurringTaskManager {
         }
         LocalDate localDateCurrently = currentDate;
         LocalDate startDateInLocalDate = null;
-        if (!task.getLastAppendedComponent().hasOnlyEndDate()) {
+        if (task.getLastAppendedComponent().isTimeSlot()) {
             startDateInLocalDate = DateFormatterUtil.dateToLocalDate(task.getLastAppendedComponent().getStartDate().getDate());
         }
         LocalDate endDateInLocalDate = DateFormatterUtil.dateToLocalDate(task.getLastAppendedComponent().getEndDate().getDate());

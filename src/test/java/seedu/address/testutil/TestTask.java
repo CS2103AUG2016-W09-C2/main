@@ -78,7 +78,7 @@ public class TestTask extends Task implements ReadOnlyTask {
 
     @Override
     public UniqueTagList getTags() {
-        return tags;
+        return new UniqueTagList(tags);
     }
     
     @Override
@@ -150,7 +150,7 @@ public class TestTask extends Task implements ReadOnlyTask {
     	StringBuilder sb = new StringBuilder();
         sb.append("add " + this.getName().fullName + " ");
         if(this.type != TaskType.FLOATING){
-        	if(this.getLastAppendedComponent().hasOnlyEndDate()){
+        	if(this.getLastAppendedComponent().isDeadline()){
             	sb.append("by "+ this.getLastAppendedComponent().getEndDate().getInputDate() + " ");
             }else{
             	sb.append("from "+ this.getLastAppendedComponent().getStartDate().getInputDate() + " ");

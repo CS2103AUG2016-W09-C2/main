@@ -75,7 +75,7 @@
     -fx-text-alignment: center;
 }
 
-#navbarView .list-cell:filled:selected:focused, #navbarView .list-cell:filled:selected {
+#navbarView .list-cell:filled:selected:focused {
     -fx-background-color: derive(#30415d, 50%);
     -fx-text-fill: white;
 }

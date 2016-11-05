@@ -68,7 +68,7 @@ public class RecurringTaskUtil {
         TaskDate startDate = task.getLastAppendedComponent().getStartDate();
         TaskDate endDate = task.getLastAppendedComponent().getEndDate();
 
-        if (!task.getLastAppendedComponent().hasOnlyEndDate()) {
+        if (task.getLastAppendedComponent().isTimeSlot()) {
             calendar.setTime(startDate.getDate());
             correctCalendarByElapsed(calendar, elapsedPeriod, recurringType);
             correctedStartDate.setDateInLong(calendar.getTime().getTime());

@@ -62,7 +62,7 @@
                      				<AnchorPane fx:id="taskListPanelPlaceholder" VBox.vgrow="ALWAYS" />
                   				</children>
                			</VBox>
-               			<AnchorPane fx:id="browserPlaceholder" maxWidth="Infinity" minWidth="100" prefHeight="570.0" prefWidth="760.0">
+               			<AnchorPane fx:id="browserPlaceholder" maxWidth="Infinity" minWidth="100" prefHeight="570.0" prefWidth="760.0" VBox.vgrow="ALWAYS">
                    			<padding>
                        			<Insets bottom="10" left="10" right="10" top="10" />
                    			</padding>

@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-//@@author A0147967J-reused
+//@@author A0147967J
 /**
  * The Browser Panel of the App modified to display the agenda.
  */
@@ -72,9 +72,6 @@ public class BrowserPanel extends UiPart {
         loadTaskList(taskList);
     }
 
-    public void loadTaskPage(ReadOnlyTask task) {
-        // Deprecated method
-    }
 
     public void updateAgenda(TaskDate inputDate, List<TaskOccurrence> taskList) {
         agenda.setDisplayedDateTime(inputDate);

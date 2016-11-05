@@ -21,7 +21,11 @@ public interface ReadOnlyTaskMaster {
      * Returns an unmodifiable view of tasks list
      */
     List<ReadOnlyTask> getTaskList();
-    List<TaskOccurrence> getTaskComponentList();
+    
+    /**
+     * Returns a view of task occurrences list
+     */
+    List<TaskOccurrence> getTaskOccurrenceList();
 
     
     /**

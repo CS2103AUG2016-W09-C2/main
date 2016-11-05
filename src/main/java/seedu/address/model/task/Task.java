@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import seedu.address.commons.util.CollectionUtil;
+import seedu.address.logic.commands.BlockCommand;
 import seedu.address.model.tag.UniqueTagList;
 
 /**
@@ -114,10 +115,20 @@ public class Task implements ReadOnlyTask {
 
     // @@author
     // @@author A0147967J
+    /**
+     * Resets the recurringDates of the task with given list.
+     */
     public void setRecurringDates(List<TaskOccurrence> newComponentList) {
         this.recurringDates = newComponentList;
     }
-
+    
+    /** 
+     * Returns true if the task represents a blocked slot. 
+     */
+    @Override
+    public boolean isBlockedSlot(){
+        return this.name.fullName.equals(Name.DUMMY_NAME);
+    }
     // @@author
     /**
      * Replaces this task's tags with the tags in the argument tag list.

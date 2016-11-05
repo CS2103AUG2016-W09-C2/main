@@ -59,14 +59,14 @@ public class TaskMaster implements ReadOnlyTaskMaster {
         return new TaskMaster();
     }
 
-    //// list overwrite operations
+    // list overwrite operations
 
     public List<Task> getTasks() {
         return tasks.getInternalTaskList();
     }
 
     @Override
-    public ObservableList<TaskOccurrence> getTaskComponentList() {
+    public ObservableList<TaskOccurrence> getTaskOccurrenceList() {
         return tasks.getInternalComponentList();
     }
 
@@ -79,7 +79,7 @@ public class TaskMaster implements ReadOnlyTaskMaster {
         this.tags.getInternalList().setAll(tags);
     }
 
-    // @@author A0147967J
+    //@@author A0147967J
     public void resetData(Collection<? extends ReadOnlyTask> newTasks,
             Collection<? extends TaskOccurrence> newComponents, Collection<Tag> newTags) {
         setTasks(newTasks.stream().map(Task::new).collect(Collectors.toList()));
@@ -88,32 +88,30 @@ public class TaskMaster implements ReadOnlyTaskMaster {
     }
 
     /**
-     * Rebuilds the component list based on restored tasks, as copy constructor
-     * of task component does not work.
+     * Rebuilds the component list based on restored tasks.
      */
     public void rebuildComponentList() {
-        this.tasks.getInternalComponentList().clear();
-        ArrayList<TaskOccurrence> fullList = new ArrayList<TaskOccurrence>();
+        ArrayList<TaskOccurrence> newInternalOccurrenceList = new ArrayList<TaskOccurrence>();
         for (Task task : tasks.getInternalTaskList()) {
-            ArrayList<TaskOccurrence> newList = new ArrayList<TaskOccurrence>();
+            ArrayList<TaskOccurrence> newRecurringDates = new ArrayList<TaskOccurrence>();
             for (TaskOccurrence c : task.getTaskDateComponent()) {
                 TaskDate startDate = c.getStartDate();
                 TaskDate endDate = c.getEndDate();
                 boolean isArchived = c.isArchived();
-                TaskOccurrence newTaskComponent = new TaskOccurrence(task, startDate, endDate);
+                TaskOccurrence newTaskOccurrence = new TaskOccurrence(task, startDate, endDate);
                 if (isArchived)
-                    newTaskComponent.archive();
-                newList.add(newTaskComponent);
-                fullList.add(newTaskComponent);
+                    newTaskOccurrence.archive();
+                newRecurringDates.add(newTaskOccurrence);
+                newInternalOccurrenceList.add(newTaskOccurrence);
             }
-            task.setRecurringDates(newList);
+            task.setRecurringDates(newRecurringDates);
         }
-        this.tasks.getInternalComponentList().setAll(fullList);
+        this.tasks.getInternalComponentList().setAll(newInternalOccurrenceList);
     }
 
-    // @@author
+    //@@author
     public void resetData(ReadOnlyTaskMaster newData) {
-        resetData(newData.getTaskList(), newData.getTaskComponentList(), newData.getTagList());
+        resetData(newData.getTaskList(), newData.getTaskOccurrenceList(), newData.getTagList());
     }
 
     //// task-level operations
@@ -211,7 +209,7 @@ public class TaskMaster implements ReadOnlyTaskMaster {
         return Objects.hash(tasks, tags);
     }
 
-    // @@author A0147967J
+    //@@author A0147967J
     public boolean archiveTask(TaskOccurrence target) throws TaskNotFoundException {
         // TODO Auto-generated method stub
         if (tasks.archive(target)) {
@@ -220,7 +218,7 @@ public class TaskMaster implements ReadOnlyTaskMaster {
             throw new UniqueTaskList.TaskNotFoundException();
         }
     }
-    // @@author
+    //@@author
 
     // @@author A0147995H
     public boolean updateTask(TaskOccurrence target, Name name, UniqueTagList tags, TaskDate startDate, TaskDate endDate,

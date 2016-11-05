@@ -129,7 +129,6 @@ public class UiManager extends ComponentManager implements Ui {
     @Subscribe
     private void handleTaskPanelSelectionChangedEvent(TaskPanelSelectionChangedEvent event){
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        mainWindow.loadTaskPage(event.getNewSelection());
     }
     
     //@@author A0147967J
@@ -142,7 +141,7 @@ public class UiManager extends ComponentManager implements Ui {
     @Subscribe
     private void handleTaskListChangedEvent(TaskListChangedEvent event){
     	logger.info(LogsCenter.getEventHandlingLogMessage(event));
-    	mainWindow.getBrowserPanel().reloadAgenda(event.data.getTaskComponentList());
+    	mainWindow.getBrowserPanel().reloadAgenda(event.data.getTaskOccurrenceList());
     }
     
     @Subscribe

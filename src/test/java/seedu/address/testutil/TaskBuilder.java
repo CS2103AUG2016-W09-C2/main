@@ -21,6 +21,7 @@ public class TaskBuilder {
     }
 
     public TaskBuilder withTags(String ... tags) throws IllegalValueException {
+        if(tags.length == 0) task.getTags().add(new Tag(""));
         for (String tag: tags) {
             task.getTags().add(new Tag(tag));
         }

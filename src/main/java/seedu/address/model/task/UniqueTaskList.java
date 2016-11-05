@@ -69,10 +69,7 @@ public class UniqueTaskList implements Iterable<Task> {
      */
     public boolean contains(ReadOnlyTask toCheck) {
         assert toCheck != null;
-        return !toCheck.getName().fullName.equals(BlockCommand.DUMMY_NAME) // Ignore
-                                                                           // blocked
-                                                                           // slot
-                                                                           // case
+        return !toCheck.isBlockedSlot() // Ignore Blocked Slot Case
                 && internalList.contains(toCheck);
     }
 
@@ -93,11 +90,11 @@ public class UniqueTaskList implements Iterable<Task> {
     }
 
     public boolean isBlockOverlappingWithTask(ReadOnlyTask toCheck) {
-        if (!toCheck.getName().fullName.equals(BlockCommand.DUMMY_NAME)) {
+        if (!toCheck.isBlockedSlot()) {
             return false;
         }
         for (Task t : internalList) {
-            if (t.getTaskType() == TaskType.NON_FLOATING && !t.getLastAppendedComponent().hasOnlyEndDate()
+            if (t.getTaskType() == TaskType.NON_FLOATING && t.getLastAppendedComponent().isTimeSlot()
                     && isWithinSlot(toCheck, t)) {
                 return true;
             }
@@ -108,7 +105,7 @@ public class UniqueTaskList implements Iterable<Task> {
 
     public boolean isOverlappingWithBlock(ReadOnlyTask toCheck) {
         for (Task t : internalList) {
-            if (t.getName().fullName.equals(BlockCommand.DUMMY_NAME) && isWithinSlot(toCheck, t)) {
+            if (t.isBlockedSlot() && isWithinSlot(toCheck, t)) {
                 return true;
             }
         }
@@ -228,7 +225,7 @@ public class UniqueTaskList implements Iterable<Task> {
     //Bad SLAP, needs improvement
     public boolean overlapsForEdit(TaskOccurrence original, TaskOccurrence toCheck){
         for(TaskOccurrence t: internalComponentList){
-            if(!t.equals(original) && t.getTaskReference().getName().fullName.equals(BlockCommand.DUMMY_NAME)){
+            if(!t.equals(original) && t.getTaskReference().isBlockedSlot()){
                 if(!(!t.getEndDate().getDate()
                         .after(toCheck.getStartDate().getDate())
                         || !t.getStartDate().getDate()

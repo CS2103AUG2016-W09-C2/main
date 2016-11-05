@@ -212,17 +212,14 @@ public class MainWindow extends UiPart {
         return this.browserPanel;
     }
 
-    public void loadTaskPage(ReadOnlyTask task) {
-        browserPanel.loadTaskPage(task);
-    }
-
     public void releaseResources() {
         browserPanel.freeResources();
     }
-
+    
+    //@@author A0147967J
     public void switchToInitialTab() {
         logic.execute("view today");
     }
-    
+    //@@author
     
 }

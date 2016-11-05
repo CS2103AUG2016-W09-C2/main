@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import seedu.address.commons.core.UnmodifiableObservableList;
 import seedu.address.commons.events.ui.AgendaTimeRangeChangedEvent;
+import seedu.address.commons.exceptions.DataConversionException;
 import seedu.address.model.task.Task;
 import seedu.address.model.task.TaskOccurrence;
 import seedu.address.model.task.TaskDate;
@@ -57,8 +58,9 @@ public interface Model {
 	/** Updates(Resets) the filtered list with given expression.*/
     void updateFilteredTaskList(Expression expression);
     
-    /** Updates the file path for current storage manager of the model.*/
-    void changeDirectory(String filePath);
+    /** Updates the file path for current storage manager of the model.
+     * @throws DataConversionException */
+    void changeDirectory(String filePath) throws DataConversionException;
     
     /** Archives the given task component. */
     void archiveTask(TaskOccurrence target) throws TaskNotFoundException;

@@ -52,7 +52,7 @@ public class RecurringTaskManagerTest {
         taskMaster.addTask(tryUpdate);
         recurringManager.appendAnyRecurringTasks(helper.getLocalDateByString("2016-10-12"));
         
-        assertEquals("Recurring task should be updated to append 1 more task occurrence", taskMaster.getTaskComponentList().size(), 2);
+        assertEquals("Recurring task should be updated to append 1 more task occurrence", taskMaster.getTaskOccurrenceList().size(), 2);
         assertEquals("Recurring task should be have unique tasks", taskMaster.getTaskList().size(), 1);
     }
     

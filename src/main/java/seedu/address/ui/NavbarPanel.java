@@ -4,6 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Logger;
+
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -103,12 +107,10 @@ public class NavbarPanel extends UiPart {
             command = FindCommand.COMMAND_WORD + " from 12am to tomorrow 12am";
             return command;
         case NAVBAR_DEADLINES:
-            day = new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
-            command = FindCommand.COMMAND_WORD + " by " + formatter.format(day) + " 12am";
+            command = FindCommand.COMMAND_WORD + " by tomorrow 12am";
             return command;
         case NAVBAR_INCOMING_DEADLINES:
-            day = new Date(System.currentTimeMillis() + 24 * 8 * 60 * 60 * 1000);
-            command = FindCommand.COMMAND_WORD + " by " + formatter.format(day) + " 12am";
+            command = FindCommand.COMMAND_WORD + " by next week tomorrow 12am";
             return command;
         case NAVBAR_FLOATING_TASKS:
             command = FindCommand.COMMAND_WORD + " -F";

@@ -5,7 +5,6 @@ import java.util.ArrayDeque;
 import seedu.address.logic.commands.*;
 
 import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
 import seedu.address.model.ModelManager.Expression;
 import seedu.address.model.ReadOnlyTaskMaster;
 import seedu.address.model.TaskMaster;
